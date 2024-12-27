@@ -35,7 +35,7 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 repository.insertRecipe(recipe)
-                loadRecipes()  // Ensure the list is refreshed after adding a recipe
+                loadRecipes()  // list is refreshed after adding a recipe
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error adding recipe: ${e.message}")
             }
