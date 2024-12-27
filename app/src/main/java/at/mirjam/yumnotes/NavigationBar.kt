@@ -1,8 +1,10 @@
 package at.mirjam.yumnotes
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -16,7 +18,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavItem("home", "Home", Icons.Default.Home),
-        BottomNavItem("addRecipe", "Add Recipe", Icons.Default.Add)
+        BottomNavItem("addRecipe", "Add Recipe", Icons.Default.Add),
+        BottomNavItem("collections", "Collections", Icons.AutoMirrored.Filled.List),
+        BottomNavItem("profile", "Profile", Icons.Default.Person)
     )
 
     BottomAppBar {

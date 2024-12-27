@@ -12,7 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import at.mirjam.yumnotes.screens.AddRecipeScreen
+import at.mirjam.yumnotes.screens.CollectionsScreen
 import at.mirjam.yumnotes.screens.HomeScreen
+import at.mirjam.yumnotes.screens.Profile
 import at.mirjam.yumnotes.ui.theme.YumNotesTheme
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
@@ -39,15 +41,19 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding) // Apply padding to NavHost
                     ) {
                         composable("home") {
-                            recipeViewModel.addSampleRecipes() // Insert sample data
                             HomeScreen(recipeViewModel = recipeViewModel)
                         }
                         composable("addRecipe") {
                             AddRecipeScreen(recipeViewModel = recipeViewModel)
                         }
-                    }
+                        composable("collections") {
+                            CollectionsScreen(recipeViewModel = recipeViewModel)
+                        }
+                        composable("profile") {
+                            Profile(recipeViewModel = recipeViewModel) }
                 }
             }
         }
     }
+}
 }
