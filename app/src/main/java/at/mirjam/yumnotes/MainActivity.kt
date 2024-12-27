@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -31,12 +32,14 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         BottomNavigationBar(navController)
                     }
-                ) { innerPadding ->
+                ) { innerPadding -> // space for navigation bar
                     NavHost(
                         navController = navController,
-                        startDestination = "home"
+                        startDestination = "home",
+                        modifier = Modifier.padding(innerPadding) // Apply padding to NavHost
                     ) {
                         composable("home") {
+                            recipeViewModel.addSampleRecipes() // Insert sample data
                             HomeScreen(recipeViewModel = recipeViewModel)
                         }
                         composable("addRecipe") {

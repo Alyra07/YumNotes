@@ -7,19 +7,13 @@ import at.mirjam.yumnotes.data.RecipeRepository
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
-    // Sample list of recipes (can be loaded from the database)
-    val recipes = repository.getAllRecipes()
+    val recipes = repository.getAllRecipes() // Observe recipes from the repository
 
-    // Example CRUD operation methods
-    fun addRecipe(recipe: Recipe) {
+    fun addSampleRecipes() {
         viewModelScope.launch {
-            repository.insertRecipe(recipe)
-        }
-    }
-
-    fun deleteRecipe(recipe: Recipe) {
-        viewModelScope.launch {
-            repository.deleteRecipe(recipe)
+            repository.insertRecipe(Recipe(name = "Spaghetti Carbonara", ingredients = "Spaghetti, Eggs, Parmesan, Bacon", instructions = "Cook pasta. Mix eggs and cheese. Fry bacon. Combine all."))
+            repository.insertRecipe(Recipe(name = "Chocolate Cake", ingredients = "Flour, Cocoa Powder, Eggs, Sugar, Butter", instructions = "Mix ingredients. Bake at 180°C for 30 minutes."))
+            repository.insertRecipe(Recipe(name = "Caesar Salad", ingredients = "Lettuce, Croutons, Parmesan, Caesar Dressing", instructions = "Toss all ingredients together."))
         }
     }
 }
