@@ -1,13 +1,26 @@
 package at.mirjam.yumnotes.data
 
-class RecipeRepository(private val recipeDao: RecipeDao) {
-    fun getAllRecipes() = recipeDao.getAllRecipes()
+import android.util.Log
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
-    suspend fun insertRecipe(recipe: Recipe) {
-        recipeDao.insertRecipe(recipe)
+class RecipeRepository(private val recipeDao: RecipeDao) {
+
+    fun getAllRecipes(): Flow<List<Recipe>> {
+        return try {
+            Log.d("RecipeRepository", "Fetching recipes from database.")
+            recipeDao.getAllRecipes()
+        } catch (e: Exception) {
+            Log.e("RecipeRepository", "Error fetching recipes: ${e.message}")
+            flowOf(emptyList())
+        }
     }
 
-    suspend fun deleteRecipe(recipe: Recipe) {
-        recipeDao.deleteRecipe(recipe)
+    suspend fun insertRecipe(recipe: Recipe) {
+        try {
+            recipeDao.insertRecipe(recipe) // Insert recipe into the database
+        } catch (e: Exception) {
+            Log.e("RecipeRepository", "Error inserting recipe: ${e.message}")
+        }
     }
 }

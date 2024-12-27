@@ -40,18 +40,10 @@ class MainActivity : ComponentActivity() {
                         startDestination = "home",
                         modifier = Modifier.padding(innerPadding) // Apply padding to NavHost
                     ) {
-                        composable("home") {
-                            HomeScreen(recipeViewModel = recipeViewModel)
-                        }
-                        composable("addRecipe") {
-                            AddRecipeScreen(recipeViewModel = recipeViewModel)
-                        }
-                        composable("collections") {
-                            CollectionsScreen(recipeViewModel = recipeViewModel)
-                        }
-                        composable("profile") {
-                            Profile(recipeViewModel = recipeViewModel)
-                        }
+                        composable("home") { HomeScreen(recipeViewModel = recipeViewModel) }
+                        composable("addRecipe") { AddRecipeScreen(recipeViewModel = recipeViewModel) }
+                        composable("collections") { CollectionsScreen(recipeViewModel = recipeViewModel) }
+                        composable("profile") { Profile(recipeViewModel = recipeViewModel) }
                 } }
             }
         }

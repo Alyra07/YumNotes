@@ -1,26 +1,41 @@
 package at.mirjam.yumnotes.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 
 @Composable
 fun HomeScreen(recipeViewModel: RecipeViewModel) {
-    val recipes = recipeViewModel.recipes.collectAsState(initial = emptyList()).value
+    // Observe the recipes from the ViewModel using collectAsState
+    val recipes by recipeViewModel.recipes.collectAsState(initial = emptyList())
 
+    // Display a message if no recipes are available, otherwise show the list of recipes
     if (recipes.isEmpty()) {
         Text(
-            text = "No recipes available. Add some delicious recipes!",
-            modifier = Modifier.fillMaxSize()
+            text = "No recipes available.",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         )
     } else {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             items(recipes) { recipe ->
                 RecipeListItem(recipe)
             }
@@ -30,6 +45,10 @@ fun HomeScreen(recipeViewModel: RecipeViewModel) {
 
 @Composable
 fun RecipeListItem(recipe: Recipe) {
-    Text(text = "Recipe: ${recipe.name}")
-    Text(text = "Ingredients: ${recipe.ingredients}")
+    Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+        Text(text = recipe.name, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge)
+        Text(text = "Ingredients: ${recipe.ingredients}", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+        Text(text = "Instructions: ${recipe.instructions}", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+        Text(text = "Tags: ${recipe.collectionTags}", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+    }
 }
