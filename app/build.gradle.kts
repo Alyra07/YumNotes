@@ -66,6 +66,7 @@ dependencies {
 
     // Room
     implementation(libs.androidx.room.runtime)
+    //noinspection UseTomlInstead
     implementation("androidx.room:room-ktx:2.6.1")
     ksp(libs.androidx.room.compiler)
 }

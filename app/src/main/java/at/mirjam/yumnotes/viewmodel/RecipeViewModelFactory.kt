@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import at.mirjam.yumnotes.data.RecipeRepository
 import at.mirjam.yumnotes.data.RecipeDatabase
 
+@Suppress("UNCHECKED_CAST")
 class RecipeViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val database = RecipeDatabase.getDatabase(context)
