@@ -22,15 +22,14 @@ fun HomeScreen(recipeViewModel: RecipeViewModel) {
     } else {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(recipes) { recipe ->
-                RecipeItem(recipe)
+                RecipeListItem(recipe)
             }
         }
     }
 }
 
 @Composable
-fun RecipeItem(recipe: Recipe) {
+fun RecipeListItem(recipe: Recipe) {
     Text(text = "Recipe: ${recipe.name}")
     Text(text = "Ingredients: ${recipe.ingredients}")
-    Text(text = "Instructions: ${recipe.instructions}")
 }

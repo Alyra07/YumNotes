@@ -50,10 +50,10 @@ class MainActivity : ComponentActivity() {
                             CollectionsScreen(recipeViewModel = recipeViewModel)
                         }
                         composable("profile") {
-                            Profile(recipeViewModel = recipeViewModel) }
-                }
+                            Profile(recipeViewModel = recipeViewModel)
+                        }
+                } }
             }
         }
     }
-}
 }
