@@ -12,12 +12,12 @@ interface RecipeDao {
     @Insert
     suspend fun insertRecipe(recipe: Recipe)
 
-    @Delete
-    suspend fun deleteRecipe(recipe: Recipe)
-
     @Query("SELECT * FROM recipes")
     fun getAllRecipes(): Flow<List<Recipe>>
 
     @Update
-    suspend fun updateRecipe(recipe: Recipe) // Update existing recipe (edit)
+    suspend fun updateRecipe(recipe: Recipe)
+
+    @Delete
+    suspend fun deleteRecipe(recipe: Recipe)
 }

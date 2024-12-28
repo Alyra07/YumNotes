@@ -1,5 +1,7 @@
 package at.mirjam.yumnotes.viewmodel
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,14 +12,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 // Controls the data flow between the UI and the data layer
-class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
+@SuppressLint("StaticFieldLeak") // for private val context
+class RecipeViewModel(private val repository: RecipeRepository, private val context: Context) : ViewModel() {
     private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
     val recipes: StateFlow<List<Recipe>> = _recipes
 
     init {
         loadRecipes()
     }
-    // load all recipes from database
+    // load all recipes from room database
     private fun loadRecipes() {
         viewModelScope.launch {
             try {
@@ -31,35 +34,37 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
             }
         }
     }
+
     // CREATE
     fun addRecipe(recipe: Recipe) {
         viewModelScope.launch {
             try {
-                repository.insertRecipe(recipe)
-                loadRecipes()  // list is refreshed after adding a recipe
+                repository.insertRecipe(recipe, context) // Pass context here
+                loadRecipes()
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error adding recipe: ${e.message}")
             }
         }
     }
+
     // DELETE
     fun deleteRecipe(recipe: Recipe) {
         viewModelScope.launch {
             try {
                 repository.deleteRecipe(recipe)
-                loadRecipes() // Refresh the list
+                loadRecipes()
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error deleting recipe: ${e.message}")
             }
         }
     }
 
-    // edit a recipe (CollectionsScreen)
+    // UPDATE
     fun updateRecipe(updatedRecipe: Recipe) {
         viewModelScope.launch {
             try {
                 repository.updateRecipe(updatedRecipe)
-                loadRecipes() // Refresh the list
+                loadRecipes()
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error updating recipe: ${e.message}")
             }
