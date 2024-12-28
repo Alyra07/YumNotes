@@ -24,7 +24,9 @@ fun CollectionsScreen(
     if (recipes.isEmpty()) {
         Text(
             text = "No recipes available. Add some delicious recipes!",
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         )
     } else {
         // Group & map recipes by tags

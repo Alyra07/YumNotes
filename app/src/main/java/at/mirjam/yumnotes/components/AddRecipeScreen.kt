@@ -1,5 +1,8 @@
 package at.mirjam.yumnotes.components
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -20,6 +23,12 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
     var ingredients by remember { mutableStateOf(TextFieldValue("")) }
     var instructions by remember { mutableStateOf(TextFieldValue("")) }
     var collectionTags by remember { mutableStateOf(TextFieldValue("")) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    // Launcher to pick an image from gallery
+    val getImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        imageUri = uri
+    }
 
     Column(
         modifier = Modifier
@@ -61,6 +70,18 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
         )
 
+        // Image Picker Button
+        Button(
+            onClick = { getImage.launch("image/*") },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Select Image")
+        }
+
+        imageUri?.let {
+            Text("Image Selected: $it")
+        }
+
         Button(
             onClick = {
                 if (name.text.isNotEmpty() && ingredients.text.isNotEmpty() && instructions.text.isNotEmpty()) {
@@ -68,7 +89,8 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                         name = name.text,
                         ingredients = ingredients.text,
                         instructions = instructions.text,
-                        collectionTags = collectionTags.text
+                        collectionTags = collectionTags.text,
+                        imageUri = imageUri?.toString() // Save the image URI (or path) here
                     )
                     recipeViewModel.addRecipe(newRecipe)
 
@@ -77,6 +99,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                     ingredients = TextFieldValue("")
                     instructions = TextFieldValue("")
                     collectionTags = TextFieldValue("")
+                    imageUri = null
                 }
             },
             modifier = Modifier.fillMaxWidth()
