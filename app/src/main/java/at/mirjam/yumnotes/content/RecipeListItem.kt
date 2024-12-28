@@ -12,6 +12,7 @@ import at.mirjam.yumnotes.data.Recipe
 import coil.compose.rememberAsyncImagePainter // Coil for loading images
 import java.io.File
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
 
 @Composable
 fun RecipeListItem(
@@ -26,23 +27,23 @@ fun RecipeListItem(
             .padding(8.dp)
             .clickable { onClick(recipe) }
     ) {
-        // Display the image as a header
+        // Header image (zoomed in / banner-like effect)
         recipe.imageUri?.let {
             Image(
-                painter = rememberAsyncImagePainter(File(context.filesDir, it)), // Use context here
+                painter = rememberAsyncImagePainter(File(context.filesDir, it)),
                 contentDescription = "Recipe image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(200.dp) // Adjust height for banner style
+                    .padding(bottom = 8.dp), // Padding below the image
+                contentScale = ContentScale.Crop // Ensure the image is cropped to fill the space
             )
         }
-
-        Spacer(modifier = Modifier.height(8.dp)) // Add space between the image and text
 
         // Recipe Name
         Text(
             text = recipe.name,
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineMedium
         )
 
         // Collection Tags
