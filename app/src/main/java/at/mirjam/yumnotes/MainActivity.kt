@@ -1,5 +1,6 @@
 package at.mirjam.yumnotes
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,13 +9,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import at.mirjam.yumnotes.screens.AddRecipeScreen
-import at.mirjam.yumnotes.screens.CollectionsScreen
-import at.mirjam.yumnotes.screens.HomeScreen
-import at.mirjam.yumnotes.screens.ProfileScreen
+import androidx.navigation.navArgument
+import at.mirjam.yumnotes.components.AddRecipeScreen
+import at.mirjam.yumnotes.components.CollectionsScreen
+import at.mirjam.yumnotes.components.HomeScreen
+import at.mirjam.yumnotes.components.ProfileScreen
+import at.mirjam.yumnotes.components.RecipeDetailsView
 import at.mirjam.yumnotes.ui.theme.YumNotesTheme
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
@@ -24,6 +28,7 @@ class MainActivity : ComponentActivity() {
         RecipeViewModelFactory(applicationContext)
     }
 
+    @SuppressLint("StateFlowValueCalledInComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,17 +39,47 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         BottomNavigationBar(navController)
                     }
-                ) { innerPadding -> // space for navigation bar
+                ) { innerPadding ->
                     NavHost(
                         navController = navController,
                         startDestination = "home",
-                        modifier = Modifier.padding(innerPadding) // Apply padding to NavHost
+                        modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable("home") { HomeScreen(recipeViewModel = recipeViewModel) }
-                        composable("addRecipe") { AddRecipeScreen(recipeViewModel = recipeViewModel) }
-                        composable("collections") { CollectionsScreen(recipeViewModel = recipeViewModel) }
-                        composable("profile") { ProfileScreen(recipeViewModel = recipeViewModel) }
-                } }
+                        composable("home") {
+                            HomeScreen(
+                                recipeViewModel = recipeViewModel,
+                                onRecipeClick = { selectedRecipe ->
+                                    navController.navigate("details/${selectedRecipe.id}")
+                                }
+                            )
+                        }
+                        composable("addRecipe") {
+                            AddRecipeScreen(recipeViewModel = recipeViewModel)
+                        }
+                        composable("collections") {
+                            CollectionsScreen(
+                                recipeViewModel = recipeViewModel,
+                                onRecipeClick = { selectedRecipe ->
+                                    navController.navigate("details/${selectedRecipe.id}")
+                                }
+                            )
+                        }
+                        composable(
+                            "details/{recipeId}",
+                            arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
+                        ) { backStackEntry ->
+                            val recipeId = backStackEntry.arguments?.getLong("recipeId") ?: 0L
+                            val recipe =
+                                recipeViewModel.recipes.value.firstOrNull { it.id == recipeId }
+                            recipe?.let {
+                                RecipeDetailsView(it)
+                            }
+                        }
+                        composable("profile") {
+                            ProfileScreen(recipeViewModel = recipeViewModel)
+                        }
+                    }
+                }
             }
         }
     }
