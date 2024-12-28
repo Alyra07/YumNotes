@@ -1,4 +1,4 @@
-package at.mirjam.yumnotes.components
+package at.mirjam.yumnotes.content
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
