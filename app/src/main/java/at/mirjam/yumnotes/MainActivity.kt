@@ -45,6 +45,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = "home",
                         modifier = Modifier.padding(innerPadding)
                     ) {
+                        // ROUTES
                         composable("home") {
                             HomeScreen(
                                 recipeViewModel = recipeViewModel,
@@ -61,6 +62,10 @@ class MainActivity : ComponentActivity() {
                                 recipeViewModel = recipeViewModel,
                                 onRecipeClick = { selectedRecipe ->
                                     navController.navigate("details/${selectedRecipe.id}")
+                                },
+                                onEditRecipeClick = { selectedRecipe ->
+                                    // Handle edit recipe navigation or logic here
+                                    navController.navigate("editRecipe/${selectedRecipe.id}")
                                 }
                             )
                         }

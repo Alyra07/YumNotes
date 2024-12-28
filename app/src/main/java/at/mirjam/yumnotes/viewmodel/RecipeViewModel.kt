@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+// Controls the data flow between the UI and the data layer
 class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
     private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
     val recipes: StateFlow<List<Recipe>> = _recipes
@@ -16,7 +17,7 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
     init {
         loadRecipes()
     }
-
+    // load all recipes from database
     private fun loadRecipes() {
         viewModelScope.launch {
             try {
@@ -30,7 +31,7 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
             }
         }
     }
-
+    // CREATE
     fun addRecipe(recipe: Recipe) {
         viewModelScope.launch {
             try {
@@ -38,6 +39,29 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
                 loadRecipes()  // list is refreshed after adding a recipe
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error adding recipe: ${e.message}")
+            }
+        }
+    }
+    // DELETE
+    fun deleteRecipe(recipe: Recipe) {
+        viewModelScope.launch {
+            try {
+                repository.deleteRecipe(recipe)
+                loadRecipes() // Refresh the list
+            } catch (e: Exception) {
+                Log.e("RecipeViewModel", "Error deleting recipe: ${e.message}")
+            }
+        }
+    }
+
+    // edit a recipe (CollectionsScreen)
+    fun updateRecipe(updatedRecipe: Recipe) {
+        viewModelScope.launch {
+            try {
+                repository.updateRecipe(updatedRecipe)
+                loadRecipes() // Refresh the list
+            } catch (e: Exception) {
+                Log.e("RecipeViewModel", "Error updating recipe: ${e.message}")
             }
         }
     }
