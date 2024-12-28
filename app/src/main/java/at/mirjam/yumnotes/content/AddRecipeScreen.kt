@@ -1,13 +1,12 @@
-package at.mirjam.yumnotes.components
+package at.mirjam.yumnotes.content
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -16,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
 
@@ -23,7 +23,10 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
     var ingredients by remember { mutableStateOf(TextFieldValue("")) }
     var instructions by remember { mutableStateOf(TextFieldValue("")) }
     var collectionTags by remember { mutableStateOf(TextFieldValue("")) }
+    val selectedTags = remember { mutableStateOf(setOf<String>()) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val predefinedTags = listOf("Italian", "Vegetarian", "Quick", "Advanced")
 
     // Launcher to pick an image from gallery
     val getImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -36,7 +39,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(text = "Add a New Recipe", style = androidx.compose.material3.MaterialTheme.typography.titleLarge)
+        Text(text = "Add a New Recipe", style = MaterialTheme.typography.titleLarge)
 
         OutlinedTextField(
             value = name,
@@ -65,12 +68,35 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
         OutlinedTextField(
             value = collectionTags,
             onValueChange = { collectionTags = it },
-            label = { Text("Collection Tags (comma-separated)") },
+            label = { Text("Custom Tags (comma-separated)") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
         )
 
-        // Image Picker Button
+        Text(text = "Predefined Tags")
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+            predefinedTags.forEach { tag ->
+                Button(
+                    onClick = {
+                        selectedTags.value = if (selectedTags.value.contains(tag)) {
+                            selectedTags.value - tag // Remove tag
+                        } else {
+                            selectedTags.value + tag // Add tag
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedTags.value.contains(tag))
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.surface
+                    )
+                ) {
+                    Text(tag)
+                }
+            }
+        }
+
         Button(
             onClick = { getImage.launch("image/*") },
             modifier = Modifier.fillMaxWidth()
@@ -90,7 +116,8 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                         ingredients = ingredients.text,
                         instructions = instructions.text,
                         collectionTags = collectionTags.text,
-                        imageUri = imageUri?.toString() // Save the image URI (or path) here
+                        selectedTags = selectedTags.value.joinToString(","),
+                        imageUri = imageUri?.toString()
                     )
                     recipeViewModel.addRecipe(newRecipe)
 
@@ -99,6 +126,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                     ingredients = TextFieldValue("")
                     instructions = TextFieldValue("")
                     collectionTags = TextFieldValue("")
+                    selectedTags.value = emptySet()
                     imageUri = null
                 }
             },

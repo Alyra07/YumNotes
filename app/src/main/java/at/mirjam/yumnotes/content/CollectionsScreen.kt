@@ -1,4 +1,4 @@
-package at.mirjam.yumnotes.components
+package at.mirjam.yumnotes.content
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize

@@ -14,12 +14,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import at.mirjam.yumnotes.components.AddRecipeScreen
-import at.mirjam.yumnotes.components.CollectionsScreen
-import at.mirjam.yumnotes.components.HomeScreen
-import at.mirjam.yumnotes.components.ProfileScreen
-import at.mirjam.yumnotes.components.RecipeDetailsView
-import at.mirjam.yumnotes.components.RecipeEditView
+import at.mirjam.yumnotes.content.AddRecipeScreen
+import at.mirjam.yumnotes.content.CollectionsScreen
+import at.mirjam.yumnotes.content.HomeScreen
+import at.mirjam.yumnotes.content.ProfileScreen
+import at.mirjam.yumnotes.content.RecipeDetailsView
+import at.mirjam.yumnotes.content.RecipeEditView
 import at.mirjam.yumnotes.ui.theme.YumNotesTheme
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
@@ -47,6 +47,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         // ROUTES
+                        // HomeScreen
                         composable("home") {
                             HomeScreen(
                                 recipeViewModel = recipeViewModel,
@@ -55,9 +56,11 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        // AddRecipeScreen
                         composable("addRecipe") {
                             AddRecipeScreen(recipeViewModel = recipeViewModel)
                         }
+                        // CollectionsScreen
                         composable("collections") {
                             CollectionsScreen(
                                 recipeViewModel = recipeViewModel,
@@ -66,6 +69,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        // RecipeDetailsView
                         composable(
                             "details/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
@@ -85,6 +89,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        // RecipeEditView
                         composable(
                             "editRecipe/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
@@ -104,6 +109,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        // ProfileScreen
                         composable("profile") {
                             ProfileScreen(recipeViewModel = recipeViewModel)
                         }

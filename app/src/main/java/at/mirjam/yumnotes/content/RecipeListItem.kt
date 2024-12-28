@@ -1,4 +1,4 @@
-package at.mirjam.yumnotes.components
+package at.mirjam.yumnotes.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -7,18 +7,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
 import coil.compose.rememberAsyncImagePainter // Coil for loading images
 import java.io.File
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 @Composable
 fun RecipeListItem(
     recipe: Recipe,
     onClick: (Recipe) -> Unit
 ) {
-    val context = LocalContext.current // Get the current context
+    val context = LocalContext.current // Get the current context (recipe data)
 
     Column(
         modifier = Modifier
@@ -26,29 +30,38 @@ fun RecipeListItem(
             .padding(8.dp)
             .clickable { onClick(recipe) }
     ) {
-        // Display the image as a header
+        // Header image
         recipe.imageUri?.let {
             Image(
-                painter = rememberAsyncImagePainter(File(context.filesDir, it)), // Use context here
+                painter = rememberAsyncImagePainter(File(context.filesDir, it)),
                 contentDescription = "Recipe image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(200.dp) // image height
+                    .clip(RoundedCornerShape(16.dp)) // Rounded corners
+                    .padding(bottom = 8.dp),
+                contentScale = ContentScale.Crop // image is cropped to fill the space
             )
         }
-
-        Spacer(modifier = Modifier.height(8.dp)) // Add space between the image and text
 
         // Recipe Name
         Text(
             text = recipe.name,
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
+            color = Color.White,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
         )
 
         // Collection Tags
         Text(
             text = "Tags: ${recipe.collectionTags}",
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.White, // White text for contrast
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
         )
     }
 }
