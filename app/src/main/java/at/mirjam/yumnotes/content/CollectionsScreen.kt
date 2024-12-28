@@ -47,7 +47,7 @@ fun CollectionsScreen(
             // HEADING
             item {
                 Text(
-                    text = "YumNotes - Home",
+                    text = "Your Collections",
                     style = MaterialTheme.typography.headlineSmall
                 )
             }
@@ -69,7 +69,6 @@ fun CollectionsScreen(
                 item {
                     Text(
                         text = "Collection: $tag",
-                        modifier = Modifier.padding(bottom = 8.dp),
                         style = MaterialTheme.typography.headlineSmall,
                     )
                 }

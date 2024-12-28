@@ -7,7 +7,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
 import coil.compose.rememberAsyncImagePainter // Coil for loading images
@@ -47,21 +46,21 @@ fun RecipeListItem(
         // Recipe Name
         Text(
             text = recipe.name,
-            style = MaterialTheme.typography.headlineSmall,
-            color = Color.White,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         )
 
         // Collection Tags
-        Text(
-            text = "Tags: ${recipe.collectionTags}",
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.White, // White text for contrast
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-        )
+        if (recipe.collectionTags.isNotEmpty()) {
+            Text(
+                text = "Tags: ${recipe.collectionTags}",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            )
+        }
     }
 }
