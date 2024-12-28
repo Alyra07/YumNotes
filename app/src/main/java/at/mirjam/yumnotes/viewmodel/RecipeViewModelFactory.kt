@@ -7,10 +7,13 @@ import at.mirjam.yumnotes.data.RecipeRepository
 import at.mirjam.yumnotes.data.RecipeDatabase
 
 @Suppress("UNCHECKED_CAST")
-class RecipeViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class RecipeViewModelFactory(
+    private val context: Context
+) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val database = RecipeDatabase.getDatabase(context)
         val repository = RecipeRepository(database.recipeDao())
-        return RecipeViewModel(repository) as T
+        return RecipeViewModel(repository, context) as T  // Pass context here
     }
 }

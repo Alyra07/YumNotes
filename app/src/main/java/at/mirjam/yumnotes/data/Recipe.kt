@@ -9,5 +9,6 @@ data class Recipe(
     val name: String,
     val ingredients: String,
     val instructions: String,
-    val collectionTags: String // Comma-separated tags, e.g., "Dessert,Quick,Budget"
+    val collectionTags: String, // Comma-separated tags, e.g., "Dessert,Quick,Budget"
+    val imageUri: String? = null // Store the image URI (or path to the image file)
 )

@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.navigation.compose)
+    // testing & debugging
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,4 +72,6 @@ dependencies {
     //noinspection UseTomlInstead
     implementation("androidx.room:room-ktx:2.6.1")
     ksp(libs.androidx.room.compiler)
+    // Images
+    implementation(libs.coil.compose)  // Coil for Jetpack Compose
 }
