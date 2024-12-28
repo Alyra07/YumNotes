@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
+import at.mirjam.yumnotes.util.predefinedTags
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 
 @SuppressLint("MutableCollectionMutableState")
@@ -26,12 +27,8 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
     val selectedTags = remember { mutableStateOf(setOf<String>()) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    val predefinedTags = listOf("Italian", "Vegetarian", "Quick", "Advanced")
-
     // Launcher to pick an image from gallery
-    val getImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        imageUri = uri
-    }
+    val getImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? -> imageUri = uri }
 
     Column(
         modifier = Modifier
@@ -111,6 +108,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
         Button(
             onClick = {
                 if (name.text.isNotEmpty() && ingredients.text.isNotEmpty() && instructions.text.isNotEmpty()) {
+                    // add new recipe entry to the database
                     val newRecipe = Recipe(
                         name = name.text,
                         ingredients = ingredients.text,
@@ -121,7 +119,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                     )
                     recipeViewModel.addRecipe(newRecipe)
 
-                    // Clear fields after saving
+                    // Clear input fields after saving
                     name = TextFieldValue("")
                     ingredients = TextFieldValue("")
                     instructions = TextFieldValue("")

@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import at.mirjam.yumnotes.R
 import at.mirjam.yumnotes.data.Recipe
+import at.mirjam.yumnotes.util.tagIcons
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 
@@ -22,14 +22,6 @@ fun RecipeDetailsView(
 ) {
     val context = LocalContext.current // Get the current context
     var isEditing by remember { mutableStateOf(false) }
-
-    // Icons for categories
-    val tagIcons = mapOf(
-        "Italian" to R.drawable.italian,
-        "Vegetarian" to R.drawable.vegetariansalad,
-        "Quick" to R.drawable.quicksandwich,
-        "Advanced" to R.drawable.advanced
-    )
 
     if (isEditing) {
         RecipeEditView(

@@ -15,12 +15,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import at.mirjam.yumnotes.content.AddRecipeScreen
+import at.mirjam.yumnotes.content.CategoryScreen
 import at.mirjam.yumnotes.content.CollectionsScreen
 import at.mirjam.yumnotes.content.HomeScreen
 import at.mirjam.yumnotes.content.ProfileScreen
 import at.mirjam.yumnotes.content.RecipeDetailsView
 import at.mirjam.yumnotes.content.RecipeEditView
 import at.mirjam.yumnotes.ui.theme.YumNotesTheme
+import at.mirjam.yumnotes.util.BottomNavigationBar
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
 
@@ -53,6 +55,18 @@ class MainActivity : ComponentActivity() {
                                 recipeViewModel = recipeViewModel,
                                 onRecipeClick = { selectedRecipe ->
                                     navController.navigate("details/${selectedRecipe.id}")
+                                },
+                                navController = navController
+                            )
+                        }
+                        // CategoryScreen (for selectedTags with tagIcons)
+                        composable("category/{tag}") { backStackEntry ->
+                            val tag = backStackEntry.arguments?.getString("tag") ?: ""
+                            CategoryScreen(
+                                recipeViewModel = recipeViewModel,
+                                tag = tag,
+                                onRecipeClick = { selectedRecipe ->
+                                    navController.navigate("details/${selectedRecipe.id}")
                                 }
                             )
                         }
@@ -60,14 +74,19 @@ class MainActivity : ComponentActivity() {
                         composable("addRecipe") {
                             AddRecipeScreen(recipeViewModel = recipeViewModel)
                         }
-                        // CollectionsScreen
+                        // CollectionsScreen (custom collectionTags)
                         composable("collections") {
                             CollectionsScreen(
                                 recipeViewModel = recipeViewModel,
                                 onRecipeClick = { selectedRecipe ->
                                     navController.navigate("details/${selectedRecipe.id}")
-                                }
+                                },
+                                navController = navController
                             )
+                        }
+                        // ProfileScreen
+                        composable("profile") {
+                            ProfileScreen(recipeViewModel = recipeViewModel)
                         }
                         // RecipeDetailsView
                         composable(
@@ -89,7 +108,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
-                        // RecipeEditView
+                        // RecipeEditView (edit or delete in RecipeDetailsView)
                         composable(
                             "editRecipe/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
@@ -108,10 +127,6 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                        }
-                        // ProfileScreen
-                        composable("profile") {
-                            ProfileScreen(recipeViewModel = recipeViewModel)
                         }
                     }
                 }
