@@ -19,6 +19,7 @@ import at.mirjam.yumnotes.components.CollectionsScreen
 import at.mirjam.yumnotes.components.HomeScreen
 import at.mirjam.yumnotes.components.ProfileScreen
 import at.mirjam.yumnotes.components.RecipeDetailsView
+import at.mirjam.yumnotes.components.RecipeEditView
 import at.mirjam.yumnotes.ui.theme.YumNotesTheme
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
@@ -62,10 +63,6 @@ class MainActivity : ComponentActivity() {
                                 recipeViewModel = recipeViewModel,
                                 onRecipeClick = { selectedRecipe ->
                                     navController.navigate("details/${selectedRecipe.id}")
-                                },
-                                onEditRecipeClick = { selectedRecipe ->
-                                    // Handle edit recipe navigation or logic here
-                                    navController.navigate("editRecipe/${selectedRecipe.id}")
                                 }
                             )
                         }
@@ -74,10 +71,37 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
                         ) { backStackEntry ->
                             val recipeId = backStackEntry.arguments?.getLong("recipeId") ?: 0L
-                            val recipe =
-                                recipeViewModel.recipes.value.firstOrNull { it.id == recipeId }
+                            val recipe = recipeViewModel.recipes.value.firstOrNull { it.id == recipeId }
                             recipe?.let {
-                                RecipeDetailsView(it)
+                                RecipeDetailsView(
+                                    recipe = it,
+                                    onDeleteClick = { selectedRecipe ->
+                                        recipeViewModel.deleteRecipe(selectedRecipe)
+                                        navController.popBackStack() // Return to the previous screen after deletion
+                                    },
+                                    onSaveEdit = { updatedRecipe ->
+                                        recipeViewModel.updateRecipe(updatedRecipe) // Save the edited recipe
+                                    }
+                                )
+                            }
+                        }
+                        composable(
+                            "editRecipe/{recipeId}",
+                            arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
+                        ) { backStackEntry ->
+                            val recipeId = backStackEntry.arguments?.getLong("recipeId") ?: 0L
+                            val recipe = recipeViewModel.recipes.value.firstOrNull { it.id == recipeId }
+                            recipe?.let {
+                                RecipeEditView(
+                                    recipe = it,
+                                    onSaveClick = { updatedRecipe ->
+                                        recipeViewModel.updateRecipe(updatedRecipe)
+                                        navController.popBackStack() // Return to the details screen after saving
+                                    },
+                                    onCancelClick = {
+                                        navController.popBackStack() // Return to the details screen without saving
+                                    }
+                                )
                             }
                         }
                         composable("profile") {
