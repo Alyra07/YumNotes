@@ -47,6 +47,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         // ROUTES
+                        // HomeScreen
                         composable("home") {
                             HomeScreen(
                                 recipeViewModel = recipeViewModel,
@@ -55,9 +56,11 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        // AddRecipeScreen
                         composable("addRecipe") {
                             AddRecipeScreen(recipeViewModel = recipeViewModel)
                         }
+                        // CollectionsScreen
                         composable("collections") {
                             CollectionsScreen(
                                 recipeViewModel = recipeViewModel,
@@ -66,6 +69,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        // RecipeDetailsView
                         composable(
                             "details/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
@@ -85,6 +89,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        // RecipeEditView
                         composable(
                             "editRecipe/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
@@ -104,6 +109,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        // ProfileScreen
                         composable("profile") {
                             ProfileScreen(recipeViewModel = recipeViewModel)
                         }
