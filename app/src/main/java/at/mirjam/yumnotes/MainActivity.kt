@@ -14,7 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import at.mirjam.yumnotes.screens.AddRecipeScreen
 import at.mirjam.yumnotes.screens.CollectionsScreen
 import at.mirjam.yumnotes.screens.HomeScreen
-import at.mirjam.yumnotes.screens.Profile
+import at.mirjam.yumnotes.screens.ProfileScreen
 import at.mirjam.yumnotes.ui.theme.YumNotesTheme
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                         composable("home") { HomeScreen(recipeViewModel = recipeViewModel) }
                         composable("addRecipe") { AddRecipeScreen(recipeViewModel = recipeViewModel) }
                         composable("collections") { CollectionsScreen(recipeViewModel = recipeViewModel) }
-                        composable("profile") { Profile(recipeViewModel = recipeViewModel) }
+                        composable("profile") { ProfileScreen(recipeViewModel = recipeViewModel) }
                 } }
             }
         }
