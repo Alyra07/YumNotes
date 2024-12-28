@@ -1,7 +1,6 @@
-package at.mirjam.yumnotes.screens
+package at.mirjam.yumnotes.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,11 +16,12 @@ import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 
 @Composable
-fun HomeScreen(recipeViewModel: RecipeViewModel) {
-    // Observe the recipes from the ViewModel using collectAsState
+fun HomeScreen(
+    recipeViewModel: RecipeViewModel,
+    onRecipeClick: (Recipe) -> Unit
+) {
     val recipes by recipeViewModel.recipes.collectAsState(initial = emptyList())
 
-    // Display a message if no recipes are available, otherwise show the list of recipes
     if (recipes.isEmpty()) {
         Text(
             text = "No recipes available.",
@@ -37,18 +37,8 @@ fun HomeScreen(recipeViewModel: RecipeViewModel) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(recipes) { recipe ->
-                RecipeListItem(recipe)
+                RecipeListItem(recipe = recipe, onClick = onRecipeClick)
             }
         }
-    }
-}
-
-@Composable
-fun RecipeListItem(recipe: Recipe) {
-    Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-        Text(text = recipe.name, style = androidx.compose.material3.MaterialTheme.typography.bodyLarge)
-        Text(text = "Ingredients: ${recipe.ingredients}", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
-        Text(text = "Instructions: ${recipe.instructions}", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
-        Text(text = "Tags: ${recipe.collectionTags}", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
     }
 }

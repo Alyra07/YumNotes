@@ -1,4 +1,4 @@
-package at.mirjam.yumnotes.screens
+package at.mirjam.yumnotes.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
