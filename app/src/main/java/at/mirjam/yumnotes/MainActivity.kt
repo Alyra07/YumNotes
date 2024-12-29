@@ -26,6 +26,8 @@ import at.mirjam.yumnotes.util.BottomNavigationBar
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
 
+// I used Jetpack Compose with a single MainActivity
+// -> managing navigation through a NavHost
 class MainActivity : ComponentActivity() {
     private val recipeViewModel: RecipeViewModel by viewModels {
         RecipeViewModelFactory(applicationContext)
@@ -43,6 +45,7 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationBar(navController)
                     }
                 ) { innerPadding ->
+                    // NAVIGATION
                     NavHost(
                         navController = navController,
                         startDestination = "home",

@@ -3,6 +3,7 @@ package at.mirjam.yumnotes.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+// General data structure for a Recipe
 @Entity(tableName = "recipes")
 data class Recipe(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

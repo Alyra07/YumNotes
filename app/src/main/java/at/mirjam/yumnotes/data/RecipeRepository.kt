@@ -7,20 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
 
+// RecipeRepository handles interactions with the database :)
 class RecipeRepository(private val recipeDao: RecipeDao) {
-
-    // Function to save image to internal storage, accept Context as a parameter
-    private fun saveImageToInternalStorage(context: Context, uri: Uri): String {
-        val fileName = UUID.randomUUID().toString() + ".jpg"
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
-        inputStream?.use { input ->
-            outputStream.use { output ->
-                input.copyTo(output)
-            }
-        }
-        return fileName
-    }
 
     // CREATE
     suspend fun insertRecipe(recipe: Recipe, context: Context) {
@@ -69,5 +57,18 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         } catch (e: Exception) {
             Log.e("RecipeRepository", "Error deleting recipe: ${e.message}")
         }
+    }
+
+    // Function to save image to internal storage, accept Context as a parameter
+    private fun saveImageToInternalStorage(context: Context, uri: Uri): String {
+        val fileName = UUID.randomUUID().toString() + ".jpg"
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
+        inputStream?.use { input ->
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+        return fileName
     }
 }
