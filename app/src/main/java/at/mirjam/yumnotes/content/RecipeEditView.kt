@@ -1,12 +1,9 @@
 package at.mirjam.yumnotes.content
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,22 +11,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
+import at.mirjam.yumnotes.data.Recipe
+import at.mirjam.yumnotes.util.tagIcons
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.input.TextFieldValue
-import at.mirjam.yumnotes.data.Recipe
-import androidx.compose.material3.TextField
 
+@OptIn(ExperimentalLayoutApi::class)
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun RecipeEditView(
     recipe: Recipe,
     onSaveClick: (Recipe) -> Unit,
     onCancelClick: () -> Unit
 ) {
-    var name by remember { mutableStateOf(TextFieldValue(recipe.name)) }
-    var ingredients by remember { mutableStateOf(TextFieldValue(recipe.ingredients)) }
-    var instructions by remember { mutableStateOf(TextFieldValue(recipe.instructions)) }
-    var tags by remember { mutableStateOf(TextFieldValue(recipe.collectionTags)) }
+    var name by remember { mutableStateOf(recipe.name) }
+    var ingredients by remember { mutableStateOf(recipe.ingredients) }
+    var instructions by remember { mutableStateOf(recipe.instructions) }
+    var tags by remember { mutableStateOf(recipe.collectionTags) }
+    var selectedTags by remember { mutableStateOf(recipe.selectedTags.split(",").toMutableSet()) }
 
     Column(
         modifier = Modifier
@@ -42,7 +44,7 @@ fun RecipeEditView(
             style = MaterialTheme.typography.headlineSmall
         )
 
-        // Adjust the TextField modifiers to prevent them from occupying the entire screen.
+        // Recipe fields
         TextField(
             value = name,
             onValueChange = { name = it },
@@ -67,9 +69,54 @@ fun RecipeEditView(
         TextField(
             value = tags,
             onValueChange = { tags = it },
-            label = { Text("Tags") },
+            label = { Text("Collection Tags") },
             modifier = Modifier.fillMaxWidth()
         )
+
+        // Predefined Tags Section
+        Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
+        FlowRow( // adjusts category icons flexibly
+            modifier = Modifier.fillMaxWidth(),
+            maxItemsInEachRow = 3,
+            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            overflow = FlowRowOverflow.Clip
+        ) {
+            tagIcons.forEach { (tag, iconRes) ->
+                Button(
+                    onClick = {
+                        // Update selectedTags state with a new MutableSet
+                        selectedTags = selectedTags.toMutableSet().apply {
+                            if (contains(tag)) {
+                                remove(tag)
+                            } else {
+                                add(tag)
+                            }
+                        }
+                    },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = if (selectedTags.contains(tag))
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.surface,
+                        contentColor = if (selectedTags.contains(tag))
+                            MaterialTheme.colorScheme.onPrimary
+                        else
+                            MaterialTheme.colorScheme.onSurface
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = iconRes),
+                        contentDescription = "$tag Icon",
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Text(
+                        text = tag,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
+        }
 
         // Buttons section
         Row(
@@ -79,10 +126,11 @@ fun RecipeEditView(
             Button(
                 onClick = {
                     val updatedRecipe = recipe.copy(
-                        name = name.text,
-                        ingredients = ingredients.text,
-                        instructions = instructions.text,
-                        collectionTags = tags.text
+                        name = name,
+                        ingredients = ingredients,
+                        instructions = instructions,
+                        collectionTags = tags,
+                        selectedTags = selectedTags.joinToString(",")
                     )
                     onSaveClick(updatedRecipe)
                 },

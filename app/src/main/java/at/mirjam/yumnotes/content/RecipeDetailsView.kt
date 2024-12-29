@@ -13,7 +13,9 @@ import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.util.tagIcons
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
+import androidx.compose.foundation.layout.FlowRow
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RecipeDetailsView(
     recipe: Recipe,
@@ -51,17 +53,20 @@ fun RecipeDetailsView(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Recipe Details
             Text(text = "Recipe Name: ${recipe.name}", style = MaterialTheme.typography.headlineMedium)
             Text(text = "Ingredients: ${recipe.ingredients}", style = MaterialTheme.typography.bodyMedium)
             Text(text = "Instructions: ${recipe.instructions}", style = MaterialTheme.typography.bodyMedium)
+            Text(text = "Collections: ${recipe.collectionTags}", style = MaterialTheme.typography.bodyMedium)
 
-            Text(text = "Predefined Tags:", style = MaterialTheme.typography.bodySmall)
-            Row(
+            // Predefined Tags Section with FlowRow
+            Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
+            FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                maxItemsInEachRow = 6,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                overflow = FlowRowOverflow.Clip
             ) {
                 recipe.selectedTags.split(",").forEach { tag ->
                     val iconRes = tagIcons[tag]
@@ -71,14 +76,13 @@ fun RecipeDetailsView(
                             contentDescription = "$tag Icon",
                             modifier = Modifier.size(24.dp)
                         )
-                        Text(text = tag)
+                        Text(text = tag,
+                            modifier = Modifier.padding(end = 16.dp))
                     } else {
                         Text(text = tag) // Fallback if no icon is available
                     }
                 }
             }
-
-            Text(text = "Tags: ${recipe.collectionTags}", style = MaterialTheme.typography.bodySmall)
 
             // Action buttons (Edit & Delete)
             Row(
