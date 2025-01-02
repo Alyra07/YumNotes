@@ -23,14 +23,18 @@ import at.mirjam.yumnotes.content.RecipeDetailsView
 import at.mirjam.yumnotes.content.RecipeEditView
 import at.mirjam.yumnotes.ui.theme.YumNotesTheme
 import at.mirjam.yumnotes.util.BottomNavigationBar
+import at.mirjam.yumnotes.viewmodel.ProfileViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
-import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
+import at.mirjam.yumnotes.viewmodel.ViewModelFactory
 
 // I used Jetpack Compose with a single MainActivity
 // -> managing navigation through a NavHost
 class MainActivity : ComponentActivity() {
-    private val recipeViewModel: RecipeViewModel by viewModels {
-        RecipeViewModelFactory(applicationContext)
+    private val recipeViewModel: RecipeViewModel by viewModels { // RecipeViewModel
+        ViewModelFactory(applicationContext)
+    }
+    private val profileViewModel: ProfileViewModel by viewModels { // ProfileViewModel
+        ViewModelFactory(applicationContext)
     }
 
     @SuppressLint("StateFlowValueCalledInComposition")
@@ -89,7 +93,7 @@ class MainActivity : ComponentActivity() {
                         }
                         // ProfileScreen
                         composable("profile") {
-                            ProfileScreen(recipeViewModel = recipeViewModel)
+                            ProfileScreen(profileViewModel = profileViewModel)
                         }
                         // RecipeDetailsView
                         composable(

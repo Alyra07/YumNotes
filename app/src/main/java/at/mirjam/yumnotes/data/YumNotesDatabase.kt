@@ -9,19 +9,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Recipe::class], version = 3, exportSchema = false)
-abstract class RecipeDatabase : RoomDatabase() {
+// Room Database for storing Recipe & Profile data
+@Database(entities = [Recipe::class, Profile::class], version = 4, exportSchema = false)
+abstract class YumNotesDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
+    abstract fun profileDao(): ProfileDao
 
     companion object {
         @Volatile
-        private var INSTANCE: RecipeDatabase? = null
+        private var INSTANCE: YumNotesDatabase? = null
 
-        fun getDatabase(context: Context): RecipeDatabase {
+        fun getDatabase(context: Context): YumNotesDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    RecipeDatabase::class.java,
+                    YumNotesDatabase::class.java,
                     "recipe_database"
                 )
                     .fallbackToDestructiveMigration()

@@ -13,14 +13,14 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
     // CREATE
     suspend fun insertRecipe(recipe: Recipe, context: Context) {
         try {
-            // Save the image to local storage and get the path
+            // Save recipe image to local storage and get the path
             recipe.imageUri?.let {
                 val imagePath = saveImageToInternalStorage(context, Uri.parse(it))
                 val recipeWithImagePath = recipe.copy(imageUri = imagePath)
-                recipeDao.insertRecipe(recipeWithImagePath)
+                recipeDao.insertRecipe(recipeWithImagePath) // Insert recipe with image
                 Log.d("RecipeRepository", "Recipe inserted successfully: $recipeWithImagePath")
             } ?: run {
-                recipeDao.insertRecipe(recipe)
+                recipeDao.insertRecipe(recipe) // Insert recipe without image
                 Log.d("RecipeRepository", "Recipe inserted without image: $recipe")
             }
         } catch (e: Exception) {
