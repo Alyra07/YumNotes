@@ -14,6 +14,7 @@ import at.mirjam.yumnotes.util.tagIcons
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.lazy.LazyColumn
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -35,65 +36,82 @@ fun RecipeDetailsView(
             onCancelClick = { isEditing = false }
         )
     } else {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Recipe Image
-            recipe.imageUri?.let {
-                Log.d("RecipeDetailsView", "Image URI: $it") // check URI
-                Image(
-                    painter = rememberAsyncImagePainter(File(context.filesDir, it)),
-                    contentDescription = "Recipe Image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
+            item { // Recipe Image
+                recipe.imageUri?.let {
+                    Log.d("RecipeDetailsView", "Image URI: $it") // check URI
+                    Image(
+                        painter = rememberAsyncImagePainter(File(context.filesDir, it)),
+                        contentDescription = "Recipe Image",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(250.dp)
+                    )
+                }
+            }
+            item { // Recipe Name
+                Text(
+                    text = "Recipe Name: ${recipe.name}",
+                    style = MaterialTheme.typography.headlineMedium
                 )
             }
-
-            // Recipe Details
-            Text(text = "Recipe Name: ${recipe.name}", style = MaterialTheme.typography.headlineMedium)
-            Text(text = "Ingredients: ${recipe.ingredients}", style = MaterialTheme.typography.bodyMedium)
-            Text(text = "Instructions: ${recipe.instructions}", style = MaterialTheme.typography.bodyMedium)
-            Text(text = "Collections: ${recipe.collectionTags}", style = MaterialTheme.typography.bodyMedium)
-
-            // Predefined Tags Section
-            Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
-            FlowRow( // layout that fills items from left to right
-                modifier = Modifier.fillMaxWidth(),
-                maxItemsInEachRow = 6, // text + icon = 2 items
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                overflow = FlowRowOverflow.Clip
-            ) {
-                recipe.selectedTags.split(",").forEach { tag ->
-                    val iconRes = tagIcons[tag]
-                    if (iconRes != null) {
-                        Icon(
-                            painter = painterResource(id = iconRes),
-                            contentDescription = "$tag Icon",
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Text(text = tag,
-                            modifier = Modifier.padding(end = 16.dp))
-                    } else {
-                        Text(text = tag) // Fallback if no icon is available
+            item { // Recipe Details
+                Text(
+                    text = "Ingredients: ${recipe.ingredients}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "Instructions: ${recipe.instructions}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = "Collections: ${recipe.collectionTags}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            item {  // Predefined Tags Section
+                Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
+                FlowRow( // layout that fills items from left to right
+                    modifier = Modifier.fillMaxWidth(),
+                    maxItemsInEachRow = 6, // text + icon = 2 items
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    recipe.selectedTags.split(",").forEach { tag ->
+                        val trimmedTag = tag.trim() // Trim spaces to avoid issues with matching
+                        val iconRes = tagIcons[trimmedTag]
+                        if (iconRes != null) {
+                            Icon(
+                                painter = painterResource(id = iconRes),
+                                contentDescription = "$trimmedTag Icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Text(
+                                text = trimmedTag,
+                                modifier = Modifier.padding(end = 16.dp)
+                            )
+                        } else {
+                            Text(text = trimmedTag) // Fallback if no icon is available
+                        }
                     }
                 }
             }
-
-            // Action buttons (Edit & Delete)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Button(onClick = { isEditing = true }) {
-                    Text(text = "Edit")
-                }
-                Button(onClick = { onDeleteClick(recipe) }) {
-                    Text(text = "Delete")
+            item {  // Action buttons (Edit & Delete)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Button(onClick = { isEditing = true }) {
+                        Text(text = "Edit")
+                    }
+                    Button(onClick = { onDeleteClick(recipe) }) {
+                        Text(text = "Delete")
+                    }
                 }
             }
         }

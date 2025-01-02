@@ -32,6 +32,7 @@ fun RecipeEditView(
     var ingredients by remember { mutableStateOf(recipe.ingredients) }
     var instructions by remember { mutableStateOf(recipe.instructions) }
     var tags by remember { mutableStateOf(recipe.collectionTags) }
+    // Initialize selectedTags by splitting the string from the recipe data
     var selectedTags by remember { mutableStateOf(recipe.selectedTags.split(",").toMutableSet()) }
 
     LazyColumn(
@@ -82,7 +83,7 @@ fun RecipeEditView(
             }
         }
 
-        item {// Predefined Tags Section
+        item { // Predefined Tags Section
             Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
             FlowRow(
                 // adjusts category icons flexibly
@@ -139,6 +140,7 @@ fun RecipeEditView(
                             ingredients = ingredients,
                             instructions = instructions,
                             collectionTags = tags,
+                            // Convert selectedTags back to a string when saving
                             selectedTags = selectedTags.joinToString(",")
                         )
                         onSaveClick(updatedRecipe)

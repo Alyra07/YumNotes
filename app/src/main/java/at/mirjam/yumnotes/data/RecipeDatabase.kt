@@ -16,7 +16,7 @@ abstract class RecipeDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: RecipeDatabase? = null
-        // Get the room database instance
+
         fun getDatabase(context: Context): RecipeDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -33,37 +33,17 @@ abstract class RecipeDatabase : RoomDatabase() {
         }
     }
 
-    // Callback to insert sample recipes when the database is created
-    // I did it this way to avoid spamming the database with sample data :)
+    // Callback to prepopulate the database with SampleData
     private class RecipeDatabaseCallback(
         private val context: Context
     ) : Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            // Insert sample recipes
             CoroutineScope(Dispatchers.IO).launch {
-                val sampleRecipes = listOf(
-                    Recipe(
-                        name = "Spaghetti Bolognese",
-                        ingredients = "Spaghetti, ground beef, tomato sauce, onion, garlic",
-                        instructions = "Cook spaghetti. Prepare sauce with ground beef and tomato sauce.",
-                        collectionTags = "Dinner",
-                        selectedTags = "Italian, Quick",
-                        imageUri = null
-                    ),
-                    Recipe(
-                        name = "Pancakes",
-                        ingredients = "Flour, milk, eggs, sugar, baking powder",
-                        instructions = "Mix ingredients. Cook on a hot pan until golden brown.",
-                        collectionTags = "Breakfast, Dessert",
-                        selectedTags = "Sweet, Quick",
-                        imageUri = null
-                    )
-                )
-
                 val database = getDatabase(context)
-                sampleRecipes.forEach {
-                    database.recipeDao().insertRecipe(it)
+                val sampleRecipes = SampleData.getSampleRecipes(context)
+                sampleRecipes.forEach { recipe ->
+                    database.recipeDao().insertRecipe(recipe)
                 }
             }
         }
