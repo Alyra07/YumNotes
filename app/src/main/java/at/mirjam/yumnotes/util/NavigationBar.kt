@@ -1,4 +1,4 @@
-package at.mirjam.yumnotes
+package at.mirjam.yumnotes.util
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List

@@ -4,8 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-@Database(entities = [Recipe::class], version = 2, exportSchema = false)
+@Database(entities = [Recipe::class], version = 3, exportSchema = false)
 abstract class RecipeDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
 
@@ -20,10 +24,27 @@ abstract class RecipeDatabase : RoomDatabase() {
                     RecipeDatabase::class.java,
                     "recipe_database"
                 )
-                    .fallbackToDestructiveMigration() // This allows data to be cleared if schema changes
+                    .fallbackToDestructiveMigration()
+                    .addCallback(RecipeDatabaseCallback(context))
                     .build()
                 INSTANCE = instance
                 instance
+            }
+        }
+    }
+
+    // Callback to prepopulate the database with SampleData
+    private class RecipeDatabaseCallback(
+        private val context: Context
+    ) : Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            CoroutineScope(Dispatchers.IO).launch {
+                val database = getDatabase(context)
+                val sampleRecipes = SampleData.getSampleRecipes(context)
+                sampleRecipes.forEach { recipe ->
+                    database.recipeDao().insertRecipe(recipe)
+                }
             }
         }
     }

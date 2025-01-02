@@ -17,6 +17,7 @@ class RecipeViewModel(private val repository: RecipeRepository, private val cont
     private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
     val recipes: StateFlow<List<Recipe>> = _recipes
 
+    // READ
     init {
         loadRecipes()
     }

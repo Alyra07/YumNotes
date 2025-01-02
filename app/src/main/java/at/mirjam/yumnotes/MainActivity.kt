@@ -14,16 +14,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import at.mirjam.yumnotes.components.AddRecipeScreen
-import at.mirjam.yumnotes.components.CollectionsScreen
-import at.mirjam.yumnotes.components.HomeScreen
-import at.mirjam.yumnotes.components.ProfileScreen
-import at.mirjam.yumnotes.components.RecipeDetailsView
-import at.mirjam.yumnotes.components.RecipeEditView
+import at.mirjam.yumnotes.content.AddRecipeScreen
+import at.mirjam.yumnotes.content.CategoryScreen
+import at.mirjam.yumnotes.content.CollectionsScreen
+import at.mirjam.yumnotes.content.HomeScreen
+import at.mirjam.yumnotes.content.ProfileScreen
+import at.mirjam.yumnotes.content.RecipeDetailsView
+import at.mirjam.yumnotes.content.RecipeEditView
 import at.mirjam.yumnotes.ui.theme.YumNotesTheme
+import at.mirjam.yumnotes.util.BottomNavigationBar
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModelFactory
 
+// I used Jetpack Compose with a single MainActivity
+// -> managing navigation through a NavHost
 class MainActivity : ComponentActivity() {
     private val recipeViewModel: RecipeViewModel by viewModels {
         RecipeViewModelFactory(applicationContext)
@@ -41,31 +45,53 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationBar(navController)
                     }
                 ) { innerPadding ->
+                    // NAVIGATION
                     NavHost(
                         navController = navController,
                         startDestination = "home",
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         // ROUTES
+                        // HomeScreen
                         composable("home") {
                             HomeScreen(
                                 recipeViewModel = recipeViewModel,
                                 onRecipeClick = { selectedRecipe ->
                                     navController.navigate("details/${selectedRecipe.id}")
-                                }
+                                },
+                                navController = navController
                             )
                         }
-                        composable("addRecipe") {
-                            AddRecipeScreen(recipeViewModel = recipeViewModel)
-                        }
-                        composable("collections") {
-                            CollectionsScreen(
+                        // CategoryScreen (for selectedTags with tagIcons)
+                        composable("category/{tag}") { backStackEntry ->
+                            val tag = backStackEntry.arguments?.getString("tag") ?: ""
+                            CategoryScreen(
                                 recipeViewModel = recipeViewModel,
+                                tag = tag,
                                 onRecipeClick = { selectedRecipe ->
                                     navController.navigate("details/${selectedRecipe.id}")
                                 }
                             )
                         }
+                        // AddRecipeScreen
+                        composable("addRecipe") {
+                            AddRecipeScreen(recipeViewModel = recipeViewModel)
+                        }
+                        // CollectionsScreen (custom collectionTags)
+                        composable("collections") {
+                            CollectionsScreen(
+                                recipeViewModel = recipeViewModel,
+                                onRecipeClick = { selectedRecipe ->
+                                    navController.navigate("details/${selectedRecipe.id}")
+                                },
+                                navController = navController
+                            )
+                        }
+                        // ProfileScreen
+                        composable("profile") {
+                            ProfileScreen(recipeViewModel = recipeViewModel)
+                        }
+                        // RecipeDetailsView
                         composable(
                             "details/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
@@ -85,6 +111,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        // RecipeEditView (edit or delete in RecipeDetailsView)
                         composable(
                             "editRecipe/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
@@ -103,9 +130,6 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                        }
-                        composable("profile") {
-                            ProfileScreen(recipeViewModel = recipeViewModel)
                         }
                     }
                 }
