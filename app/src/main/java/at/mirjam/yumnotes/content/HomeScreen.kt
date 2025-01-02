@@ -61,13 +61,9 @@ fun HomeScreen(
 
         // If there's no search query, display the default content
         if (searchQuery.value.isEmpty()) {
+
             // PREDEFINED TAGS (CATEGORIES)
             item {
-                Text(
-                    text = "Categories",
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
                 // Category Icons
                 CategoryIconRow(navController = navController)
             }

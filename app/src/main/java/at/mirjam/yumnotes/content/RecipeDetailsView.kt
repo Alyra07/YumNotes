@@ -25,7 +25,7 @@ fun RecipeDetailsView(
     val context = LocalContext.current // Get the current context
     var isEditing by remember { mutableStateOf(false) }
 
-    if (isEditing) {
+    if (isEditing) { // show RecipeEditView if isEditing is true
         RecipeEditView(
             recipe = recipe,
             onSaveClick = { updatedRecipe ->
@@ -59,11 +59,11 @@ fun RecipeDetailsView(
             Text(text = "Instructions: ${recipe.instructions}", style = MaterialTheme.typography.bodyMedium)
             Text(text = "Collections: ${recipe.collectionTags}", style = MaterialTheme.typography.bodyMedium)
 
-            // Predefined Tags Section with FlowRow
+            // Predefined Tags Section
             Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
-            FlowRow(
+            FlowRow( // layout that fills items from left to right
                 modifier = Modifier.fillMaxWidth(),
-                maxItemsInEachRow = 6,
+                maxItemsInEachRow = 6, // text + icon = 2 items
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 overflow = FlowRowOverflow.Clip
