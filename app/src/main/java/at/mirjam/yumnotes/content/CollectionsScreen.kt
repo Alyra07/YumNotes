@@ -64,12 +64,6 @@ fun CollectionsScreen(
 
         // PREDEFINED TAGS (Categories)
         item {
-            Text(
-                text = "Categories",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
             // Category Icons
             CategoryIconRow(navController = navController)
         }
