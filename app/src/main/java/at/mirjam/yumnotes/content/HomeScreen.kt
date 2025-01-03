@@ -73,8 +73,8 @@ fun HomeScreen(
                 item {
                     Text(
                         text = "Featured Recipe",
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.padding(vertical = 8.dp)
                     )
                     RecipeListItem(recipe = randomRecipe, onClick = onRecipeClick)
                 }
@@ -85,7 +85,6 @@ fun HomeScreen(
                 Text(
                     text = "All Recipes",
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
 
