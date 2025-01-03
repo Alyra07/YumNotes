@@ -1,7 +1,6 @@
 package at.mirjam.yumnotes.content
 
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,28 +22,40 @@ import at.mirjam.yumnotes.viewmodel.ProfileViewModel
 @Composable
 fun ProfileScreen(profileViewModel: ProfileViewModel) {
     val context = LocalContext.current
-    val profileState = profileViewModel.profile.collectAsState()
-    val profile = profileState.value
+    val profileState by profileViewModel.profile.collectAsState()
+    val profile = profileState
 
     var username by remember { mutableStateOf(profile?.username ?: "YumUser") }
     var profileImageBitmap by remember {
         mutableStateOf(
             profile?.profileImageUri?.let { uri ->
-                BitmapFactory.decodeStream(context.contentResolver.openInputStream(Uri.parse(uri)))
+                try {
+                    val inputStream = context.openFileInput(uri)
+                    BitmapFactory.decodeStream(inputStream)
+                } catch (e: Exception) {
+                    null // If the file doesn't exist, fallback to null
+                }
             }
         )
     }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
+            profileViewModel.saveProfileImage(context, uri) // Save image using repository
             profileImageBitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(it))
-            profileViewModel.updateProfileImageUri(it.toString())
         }
     }
 
-    LaunchedEffect(profile?.username) {
-        // Sync the local state with the ViewModel when profile updates
+    LaunchedEffect(profile?.username, profile?.profileImageUri) {
         username = profile?.username ?: "YumUser"
+        profile?.profileImageUri?.let { uri ->
+            try {
+                val inputStream = context.openFileInput(uri)
+                profileImageBitmap = BitmapFactory.decodeStream(inputStream)
+            } catch (e: Exception) {
+                profileImageBitmap = null
+            }
+        }
     }
 
     Column(
@@ -56,7 +67,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
     ) {
         Box(
             modifier = Modifier
-                .size(120.dp)
+                .size(200.dp)
                 .padding(8.dp)
         ) {
             if (profileImageBitmap != null) {
@@ -78,9 +89,13 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                 onClick = { imagePickerLauncher.launch("image/*") },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .size(32.dp)
+                    .size(60.dp),
             ) {
-                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Profile Picture")
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit Profile Picture",
+                    modifier = Modifier.fillMaxSize().padding(top = 8.dp)
+                )
             }
         }
 

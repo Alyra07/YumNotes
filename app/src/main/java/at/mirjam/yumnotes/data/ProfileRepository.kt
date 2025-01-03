@@ -7,8 +7,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
 
+// ProfileRepository controls access to the ProfileDao (username & profile image)
 class ProfileRepository(private val profileDao: ProfileDao) {
 
+    // CREATE
     suspend fun insertProfile(profile: Profile, context: Context) {
         try {
             profile.profileImageUri?.let {
@@ -25,6 +27,7 @@ class ProfileRepository(private val profileDao: ProfileDao) {
         }
     }
 
+    // READ
     fun getProfile(): Flow<Profile?> {
         return try {
             Log.d("ProfileRepository", "Fetching profile from database.")
@@ -35,6 +38,7 @@ class ProfileRepository(private val profileDao: ProfileDao) {
         }
     }
 
+    // UPDATE
     suspend fun updateProfile(profile: Profile) {
         try {
             profileDao.updateProfile(profile)
@@ -44,7 +48,8 @@ class ProfileRepository(private val profileDao: ProfileDao) {
         }
     }
 
-    private fun saveImageToInternalStorage(context: Context, uri: Uri): String {
+    // save a selected profile image
+    internal fun saveImageToInternalStorage(context: Context, uri: Uri): String {
         val fileName = UUID.randomUUID().toString() + ".jpg"
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
