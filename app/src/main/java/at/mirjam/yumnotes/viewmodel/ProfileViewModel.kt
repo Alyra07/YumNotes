@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import at.mirjam.yumnotes.data.Profile
 import at.mirjam.yumnotes.data.ProfileRepository
+import at.mirjam.yumnotes.util.FileUtil
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
@@ -43,13 +44,11 @@ class ProfileViewModel(
         }
     }
 
-    // Update the username in the repository
-    fun updateUsername(newUsername: String) {
+    // Update profile information
+    fun updateProfile(profile: Profile) {
         viewModelScope.launch {
-            val updatedProfile = profile.value?.copy(username = newUsername) ?: Profile(username = newUsername)
-            Log.d("ProfileViewModel", "Updating username to: $newUsername")
-            profileRepository.updateProfile(updatedProfile)
-            loadProfile() // Ensure the profile is refreshed
+            profileRepository.updateProfile(profile)
+            _profile.value = profile // update the local state as well
         }
     }
 
@@ -58,9 +57,12 @@ class ProfileViewModel(
         viewModelScope.launch {
             val profile = profileRepository.getProfile().firstOrNull()
             profile?.let {
-                val imagePath = profileRepository.saveImageToInternalStorage(context, uri)
+                // save the image and get the path
+                val imagePath = FileUtil.saveImageToInternalStorage(context, uri)
+                // update profile with the new image path
                 profileRepository.updateProfile(it.copy(profileImageUri = imagePath))
             }
         }
     }
+
 }

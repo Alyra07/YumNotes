@@ -40,7 +40,7 @@ class RecipeViewModel(private val repository: RecipeRepository, private val cont
     fun addRecipe(recipe: Recipe) {
         viewModelScope.launch {
             try {
-                repository.insertRecipe(recipe, context) // Pass context here
+                repository.insertRecipe(recipe, context) // Pass context
                 loadRecipes()
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error adding recipe: ${e.message}")

@@ -3,9 +3,9 @@ package at.mirjam.yumnotes.data
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import at.mirjam.yumnotes.util.FileUtil
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import java.util.UUID
 
 // ProfileRepository controls access to the ProfileDao (username & profile image)
 class ProfileRepository(private val profileDao: ProfileDao) {
@@ -13,15 +13,14 @@ class ProfileRepository(private val profileDao: ProfileDao) {
     // CREATE
     suspend fun insertProfile(profile: Profile, context: Context) {
         try {
-            profile.profileImageUri?.let {
-                val imagePath = saveImageToInternalStorage(context, Uri.parse(it))
-                val profileWithImagePath = profile.copy(profileImageUri = imagePath)
-                profileDao.insertProfile(profileWithImagePath)
-                Log.d("ProfileRepository", "Profile inserted successfully: $profileWithImagePath")
-            } ?: run {
-                profileDao.insertProfile(profile)
-                Log.d("ProfileRepository", "Profile inserted without image: $profile")
-            }
+            // Save the profile image to internal storage
+            val profileWithImagePath = profile.copy(
+                profileImageUri = profile.profileImageUri?.let {
+                    FileUtil.saveImageToInternalStorage(context, Uri.parse(it))
+                }
+            )
+            profileDao.insertProfile(profileWithImagePath) // Insert profile with image path
+            Log.d("ProfileRepository", "Profile inserted successfully: $profileWithImagePath")
         } catch (e: Exception) {
             Log.e("ProfileRepository", "Error inserting profile: ${e.message}")
         }
@@ -46,18 +45,5 @@ class ProfileRepository(private val profileDao: ProfileDao) {
         } catch (e: Exception) {
             Log.e("ProfileRepository", "Error updating profile: ${e.message}")
         }
-    }
-
-    // save a selected profile image
-    internal fun saveImageToInternalStorage(context: Context, uri: Uri): String {
-        val fileName = UUID.randomUUID().toString() + ".jpg"
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
-        inputStream?.use { input ->
-            outputStream.use { output ->
-                input.copyTo(output)
-            }
-        }
-        return fileName
     }
 }
