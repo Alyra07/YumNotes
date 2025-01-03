@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.util.CategoryIconRow
+import at.mirjam.yumnotes.util.RecipeListItem
 import at.mirjam.yumnotes.util.SearchBar
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 

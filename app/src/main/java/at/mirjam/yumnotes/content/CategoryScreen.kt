@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
+import at.mirjam.yumnotes.util.RecipeListItem
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 
 @Composable

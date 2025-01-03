@@ -50,7 +50,7 @@ fun CategoryIconRow(navController: NavController) {
                         painter = painterResource(id = iconRes),
                         contentDescription = "$tag Icon",
                         modifier = Modifier.size(48.dp),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
                     )
                     Text(
                         text = tag,

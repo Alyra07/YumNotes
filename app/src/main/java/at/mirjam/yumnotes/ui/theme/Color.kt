@@ -2,10 +2,16 @@ package at.mirjam.yumnotes.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Primary Palette
+val PrimaryBrown = Color(0xFF5E3C2C)
+val AccentBeige = Color(0xFFDBCDB5)
+val SecondaryGreen = Color(0xFF6C9E4F)
+val AccentRed = Color(0xFFA4330D)
+val AccentOrange = Color(0xFFED6E3A)
+val AccentPeach = Color(0xFFE9B08E)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+// Black & White Palette
+val Black = Color(0xFF000000)
+val DarkGray = Color(0xFF444444)
+val LightGray = Color(0xFFF1F1F1)
+val White = Color(0xFFFFFFFF)

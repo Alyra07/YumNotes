@@ -30,16 +30,16 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
     var username by remember { mutableStateOf(profile?.username ?: "YumUser") }
     var profileImageUri by remember { mutableStateOf(profile?.profileImageUri) }
 
+    LaunchedEffect(profile?.username, profile?.profileImageUri) {
+        username = profile?.username ?: "YumUser"
+        profileImageUri = profile?.profileImageUri
+    }
+
     val imagePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             profileViewModel.saveProfileImage(context, uri)
             profileImageUri = uri.toString()  // Save the URI for future use
         }
-    }
-
-    LaunchedEffect(profile?.username, profile?.profileImageUri) {
-        username = profile?.username ?: "YumUser"
-        profileImageUri = profile?.profileImageUri
     }
 
     LazyColumn(
@@ -49,7 +49,15 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        item { // Profile Image
+        item {
+            Text(
+                text = "Profile",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        item { // PROFILE IMAGE
             Box(
                 modifier = Modifier
                     .size(250.dp)
@@ -86,6 +94,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit Profile Picture",
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -99,32 +108,47 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Delete Profile Picture",
+                        tint = MaterialTheme.colorScheme.error
                     )
                 }
             }
         }
-        item { // Username field
-            TextField(
+
+        item { // Username field (can edit)
+            OutlinedTextField(
                 value = username,
                 onValueChange = { newText ->
-                    if (newText.length in 1..30) { // Username length
+                    if (newText.length in 1..30) {
                         username = newText
                     } else if (newText.length > 30) {
-                        // show an error message or truncate the text to 30 characters
                         username = newText.take(30)
                     }
                 },
                 label = { Text("Username") },
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.onSecondary,
+                    focusedLabelColor = MaterialTheme.colorScheme.onSecondary,
+                    cursorColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             )
+            Spacer(modifier = Modifier.height(8.dp))
         }
-        item { // Save button
+
+        item { // Save Username button
             Button(
                 onClick = {
                     profileViewModel.updateProfile(profile?.copy(username = username) ?: return@Button)
                     Toast.makeText(context, "Username saved: $username", Toast.LENGTH_SHORT).show()
                 },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Save Username")
             }
