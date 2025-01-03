@@ -17,11 +17,12 @@ class RecipeViewModel(private val repository: RecipeRepository, private val cont
     private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
     val recipes: StateFlow<List<Recipe>> = _recipes
 
-    // READ
+    // load all recipes from room database
     init {
         loadRecipes()
     }
-    // load all recipes from room database
+
+    // READ
     private fun loadRecipes() {
         viewModelScope.launch {
             try {
@@ -40,22 +41,10 @@ class RecipeViewModel(private val repository: RecipeRepository, private val cont
     fun addRecipe(recipe: Recipe) {
         viewModelScope.launch {
             try {
-                repository.insertRecipe(recipe, context) // Pass context here
+                repository.insertRecipe(recipe, context) // Pass context
                 loadRecipes()
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error adding recipe: ${e.message}")
-            }
-        }
-    }
-
-    // DELETE
-    fun deleteRecipe(recipe: Recipe) {
-        viewModelScope.launch {
-            try {
-                repository.deleteRecipe(recipe)
-                loadRecipes()
-            } catch (e: Exception) {
-                Log.e("RecipeViewModel", "Error deleting recipe: ${e.message}")
             }
         }
     }
@@ -68,6 +57,18 @@ class RecipeViewModel(private val repository: RecipeRepository, private val cont
                 loadRecipes()
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error updating recipe: ${e.message}")
+            }
+        }
+    }
+
+    // DELETE
+    fun deleteRecipe(recipe: Recipe) {
+        viewModelScope.launch {
+            try {
+                repository.deleteRecipe(recipe)
+                loadRecipes()
+            } catch (e: Exception) {
+                Log.e("RecipeViewModel", "Error deleting recipe: ${e.message}")
             }
         }
     }
