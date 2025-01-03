@@ -68,17 +68,17 @@ fun HomeScreen(
                 )
             }
         } else {
-            // FEATURED RECIPE SECTION
-            val featuredRecipe = recipes.firstOrNull()
-            featuredRecipe?.let {
+            // FEATURED RECIPE
+            recipes.randomOrNull()?.let { randomRecipe ->
                 item {
                     Text(
                         text = "Featured Recipe",
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.padding(bottom = 16.dp)
                     )
+                    // display a random RecipeListItem
+                    RecipeListItem(recipe = randomRecipe, onClick = onRecipeClick)
                 }
-                // Display featured RecipeListItem
-                item { RecipeListItem(recipe = it, onClick = onRecipeClick) }
             }
 
             item { // ALL RECIPES SECTION
