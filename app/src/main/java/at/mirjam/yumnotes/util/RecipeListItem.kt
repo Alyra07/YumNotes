@@ -10,12 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
-import coil.compose.rememberAsyncImagePainter // Coil for loading images
+import coil.compose.rememberAsyncImagePainter // for loading images
 import java.io.File
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.res.painterResource
+import at.mirjam.yumnotes.R
 
 @Composable
 fun RecipeListItem(
@@ -34,18 +36,21 @@ fun RecipeListItem(
     ) {
         Column {
             // Recipe Image
-            recipe.imageUri?.let {
-                Image(
-                    painter = rememberAsyncImagePainter(File(context.filesDir, it)),
-                    contentDescription = "Recipe image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .padding(bottom = 16.dp),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = recipe.imageUri?.let { File(context.filesDir, it) },
+                    // show placeholder when no image / loading
+                    placeholder = painterResource(id = R.drawable.placeholder_img),
+                    error = painterResource(id = R.drawable.placeholder_img)
+                ),
+                contentDescription = "Recipe image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .padding(bottom = 16.dp),
+                contentScale = ContentScale.Crop
+            )
 
             // Recipe Name
             Text(

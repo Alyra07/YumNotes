@@ -16,6 +16,7 @@ import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.util.tagIcons
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -35,6 +36,14 @@ fun RecipeEditView(
     // Initialize selectedTags by splitting the string from the recipe data
     var selectedTags by remember { mutableStateOf(recipe.selectedTags.split(",").toMutableSet()) }
 
+//    var imageUri by remember { mutableStateOf<Uri?>(Uri.parse(recipe.imageUri)) }
+
+    // Launcher to pick an image from the gallery
+//    val getImage =
+//        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+//            imageUri = uri
+//        }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -47,6 +56,25 @@ fun RecipeEditView(
                 style = MaterialTheme.typography.headlineSmall
             )
         }
+
+//        item { // Select Image
+//            Button(
+//                onClick = { getImage.launch("image/*") },
+//                modifier = Modifier.fillMaxWidth(),
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = MaterialTheme.colorScheme.secondary,
+//                    contentColor = MaterialTheme.colorScheme.onSecondary
+//                )
+//            ) {
+//                Text("Select Image")
+//            }
+//
+//            Image(
+//                imageVector = R.drawable.placeholder_img,
+//                contentDescription = "Selected Recipe Image",
+//                modifier = Modifier.size(200.dp).align(Alignment.CenterHorizontally)
+//            )
+//        }
 
         item { // Recipe fields
             Column (
@@ -102,7 +130,7 @@ fun RecipeEditView(
                                 }
                             }
                         },
-                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        colors = ButtonDefaults.buttonColors(
                             containerColor = if (selectedTags.contains(tag))
                                 MaterialTheme.colorScheme.primary
                             else
@@ -140,7 +168,8 @@ fun RecipeEditView(
                             instructions = instructions,
                             collectionTags = tags,
                             // Convert selectedTags back to a string when saving
-                            selectedTags = selectedTags.joinToString(",")
+                            selectedTags = selectedTags.joinToString(","),
+//                          imageUri = imageUri?.toString()
                         )
                         onSaveClick(updatedRecipe)
                     },

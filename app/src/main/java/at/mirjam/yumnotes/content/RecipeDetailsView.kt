@@ -25,6 +25,7 @@ import at.mirjam.yumnotes.util.tagIcons
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 import androidx.navigation.NavController
+import at.mirjam.yumnotes.R
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -57,22 +58,21 @@ fun RecipeDetailsView(
                     onClick = { navController.navigateUp() },
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
+                        .background(MaterialTheme.colorScheme.surface)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Image( // Recipe Image
                     painter = rememberAsyncImagePainter(
-                        File(
-                            LocalContext.current.filesDir,
-                            recipe.imageUri ?: ""
-                        )
+                        model = recipe.imageUri?.let { File(LocalContext.current.filesDir, it) },
+                        placeholder = painterResource(id = R.drawable.placeholder_img), // if there is no image
+                        error = painterResource(id = R.drawable.placeholder_img) // if there is an error
                     ),
                     contentDescription = "Recipe Image",
                     contentScale = ContentScale.Crop,
