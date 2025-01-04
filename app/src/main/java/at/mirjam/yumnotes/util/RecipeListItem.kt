@@ -27,11 +27,10 @@ fun RecipeListItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.tertiary)
             .clickable { onClick(recipe) }
-            .padding(16.dp)
+            .padding(bottom = 12.dp) // space underneath text
     ) {
         Column {
             // Recipe Image
@@ -43,7 +42,7 @@ fun RecipeListItem(
                         .fillMaxWidth()
                         .height(200.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .padding(bottom = 8.dp),
+                        .padding(bottom = 16.dp),
                     contentScale = ContentScale.Crop
                 )
             }
@@ -53,15 +52,16 @@ fun RecipeListItem(
                 text = recipe.name,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onTertiary,
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
 
             // Tags
             if (recipe.collectionTags.isNotEmpty()) {
                 Text(
-                    text = "Tags: ${recipe.collectionTags}",
+                    text = "Collections: ${recipe.collectionTags}",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onTertiary
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 )
             }
         }

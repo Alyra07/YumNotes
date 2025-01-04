@@ -96,7 +96,7 @@ fun CollectionsScreen(
                 item {
                     Text(
                         text = "Collection: $tag",
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 }
                 items(recipesForTag) { recipe ->

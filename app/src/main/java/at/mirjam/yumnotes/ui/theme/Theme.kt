@@ -5,10 +5,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color.Companion.Black
 
 // Define custom color schemes
 private val DarkColorScheme = darkColorScheme(
-    primary = SecondaryGreen,
+    primary = PrettyGreen,
     onPrimary = White,
     secondary = AccentPeach,
     onSecondary = DarkGray,
@@ -18,15 +19,15 @@ private val DarkColorScheme = darkColorScheme(
     surfaceContainer = DarkGray,
     onSurface = LightGray, //
     onSurfaceVariant = LightGray,
-    tertiary = PrimaryBrown,
-    onTertiary = LightGray,
+    tertiary = DarkBrown,
+    onTertiary = White,
     error = AccentOrange
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = SecondaryGreen,
+    primary = PrettyGreen,
     onPrimary = White,
-    secondary = PrimaryBrown,
+    secondary = DarkBrown,
     onSecondary = White,
     background = LightGray,
     onBackground = Black,
@@ -34,8 +35,8 @@ private val LightColorScheme = lightColorScheme(
     surfaceContainer = LightGray,
     onSurface = DarkGray,
     onSurfaceVariant = DarkGray,
-    tertiary = AccentOrange,
-    onTertiary = AccentPeach,
+    tertiary = AccentBeige,
+    onTertiary = Black,
     error = AccentRed
 )
 

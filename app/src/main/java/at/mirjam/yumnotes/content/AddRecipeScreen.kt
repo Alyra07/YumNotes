@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
@@ -81,7 +82,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(bottom = 8.dp))
 
-            // Toggleable CategoryIconRow
+            // Toggleable tagIcons
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -106,7 +107,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                                 MaterialTheme.colorScheme.onSurface
                         )
                     ) {
-                        Icon(
+                        Image( // Category icon
                             painter = painterResource(id = iconRes),
                             contentDescription = "$tag Icon",
                             modifier = Modifier.size(24.dp)

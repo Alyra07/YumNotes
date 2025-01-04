@@ -85,7 +85,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
         ) {
-            IconButton(
+            IconButton( // edit
                 onClick = { imagePickerLauncher.launch("image/*") },
                 modifier = Modifier.size(60.dp),
             ) {
@@ -96,7 +96,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            IconButton(
+            IconButton( // delete
                 onClick = {
                     profileImageUri = null
                     profileViewModel.updateProfile(

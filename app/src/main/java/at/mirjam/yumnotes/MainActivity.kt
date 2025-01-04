@@ -104,7 +104,6 @@ class MainActivity : ComponentActivity() {
                             "details/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
                         ) { backStackEntry ->
-                            // Retrieve the recipeId from the backStackEntry
                             val recipeId = backStackEntry.arguments?.getLong("recipeId") ?: 0L
                             val recipe = recipeViewModel.recipes.value.firstOrNull { it.id == recipeId }
                             recipe?.let {
@@ -112,11 +111,12 @@ class MainActivity : ComponentActivity() {
                                     recipe = it,
                                     onDeleteClick = { selectedRecipe ->
                                         recipeViewModel.deleteRecipe(selectedRecipe)
-                                        navController.popBackStack() // Return to the previous screen after deletion
+                                        navController.popBackStack()
                                     },
                                     onSaveEdit = { updatedRecipe ->
-                                        recipeViewModel.updateRecipe(updatedRecipe) // Save the edited recipe
-                                    }
+                                        recipeViewModel.updateRecipe(updatedRecipe)
+                                    },
+                                    navController = navController // for back button
                                 )
                             }
                         }

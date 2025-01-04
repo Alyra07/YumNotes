@@ -1,9 +1,9 @@
 package at.mirjam.yumnotes.content
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -83,10 +83,9 @@ fun RecipeEditView(
             }
         }
 
-        item { // Predefined Tags Section
+        item { // Category Tags Section
             Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
-            FlowRow(
-                // adjusts category icons flexibly
+            FlowRow( // adjusts category icons flexibly
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -114,7 +113,7 @@ fun RecipeEditView(
                                 MaterialTheme.colorScheme.onSurface
                         )
                     ) {
-                        Icon(
+                        Image( // Category Icon
                             painter = painterResource(id = iconRes),
                             contentDescription = "$tag Icon",
                             modifier = Modifier.size(24.dp)
@@ -133,7 +132,7 @@ fun RecipeEditView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Button(
+                Button( // Save
                     onClick = {
                         val updatedRecipe = recipe.copy(
                             name = name,
@@ -150,7 +149,7 @@ fun RecipeEditView(
                     Text("Save")
                 }
 
-                Button(
+                Button( // Cancel
                     onClick = onCancelClick,
                     modifier = Modifier.padding(vertical = 8.dp)
                 ) {
