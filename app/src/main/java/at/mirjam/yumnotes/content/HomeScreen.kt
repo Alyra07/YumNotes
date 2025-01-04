@@ -15,8 +15,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.util.CategoryIconRow
+import at.mirjam.yumnotes.util.RecipeListItem
 import at.mirjam.yumnotes.util.SearchBar
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
+import at.mirjam.yumnotes.util.HeaderWithLogo
 
 @Composable
 fun HomeScreen(
@@ -26,14 +28,12 @@ fun HomeScreen(
 ) {
     val recipes by recipeViewModel.recipes.collectAsState(initial = emptyList())
 
-    // SearchBar search query state
     val searchQuery = remember { mutableStateOf("") }
 
-    // Filtered recipes based on search query
     val filteredRecipes = if (searchQuery.value.isNotEmpty()) {
         recipes.filter { it.name.contains(searchQuery.value, ignoreCase = true) }
     } else {
-        emptyList() // Empty list when nothing is typed
+        recipes
     }
 
     LazyColumn(
@@ -42,72 +42,54 @@ fun HomeScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // HEADING HOME SCREEN
-        item {
-            Text(
-                text = "YumNotes - Recipes",
-                style = MaterialTheme.typography.headlineSmall
-            )
+        item { // HEADING & LOGO
+            HeaderWithLogo(heading = "YumNotes - Recipes")
         }
-        // SEARCH BAR
+
+        // Search Bar
         item {
             SearchBar(
                 searchQuery = searchQuery,
-                onSearchQueryChanged = { query ->
-                    searchQuery.value = query // Update search query
-                }
+                onSearchQueryChanged = { query -> searchQuery.value = query }
             )
         }
+        // Category Icon Row
+        item {
+            CategoryIconRow(navController = navController)
+        }
 
-        // If there's no search query, display the default content
-        if (searchQuery.value.isEmpty()) {
-
-            // PREDEFINED TAGS (CATEGORIES)
+        if (filteredRecipes.isEmpty()) {
+            // No recipes found
             item {
-                // Category Icons
-                CategoryIconRow(navController = navController)
+                Text(
+                    text = "No recipes found. Add some now! :)",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
-
-            // RANDOM RECIPE
+        } else {
+            // Featured Recipe Section
             recipes.randomOrNull()?.let { randomRecipe ->
                 item {
                     Text(
                         text = "Featured Recipe",
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.padding(bottom = 16.dp)
                     )
+                    // Display a random RecipeListItem
                     RecipeListItem(recipe = randomRecipe, onClick = onRecipeClick)
                 }
             }
 
-            // DISPLAY ALL RECIPES
-            item {
+            item { // All Recipes Section
                 Text(
                     text = "All Recipes",
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(top = 16.dp)
+                    style = MaterialTheme.typography.headlineSmall
                 )
             }
-
-            // List of all recipes
-            items(recipes) { recipe ->
+            // Display filtered recipes (based on search query)
+            items(filteredRecipes) { recipe ->
                 RecipeListItem(recipe = recipe, onClick = onRecipeClick)
-            }
-        } else {
-            // If there is a search query, only show matching recipes
-            if (filteredRecipes.isEmpty()) {
-                item {
-                    Text(
-                        text = "No results found.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-            } else {
-                // List of filtered recipes
-                items(filteredRecipes) { recipe ->
-                    RecipeListItem(recipe = recipe, onClick = onRecipeClick)
-                }
             }
         }
     }

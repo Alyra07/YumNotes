@@ -3,7 +3,6 @@ package at.mirjam.yumnotes.content
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,6 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
+import at.mirjam.yumnotes.util.HeaderWithLogo
+import at.mirjam.yumnotes.util.RecipeListItem
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 
 @Composable
@@ -30,15 +31,11 @@ fun CategoryScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        item {
-            Text(
-                text = "$tag Recipes",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+        item { // HEADING & LOGO
+            HeaderWithLogo(heading = "$tag Recipes")
         }
 
-        if (filteredRecipes.isEmpty()){
+        if (filteredRecipes.isEmpty()){ // No recipes found for selectedTags
             item {
                 Text(
                     text = "No recipes available in this category!"

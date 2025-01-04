@@ -1,6 +1,5 @@
 package at.mirjam.yumnotes.content
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -23,10 +22,10 @@ fun RecipeDetailsView(
     onDeleteClick: (Recipe) -> Unit,
     onSaveEdit: (Recipe) -> Unit
 ) {
-    val context = LocalContext.current // Get the current context
     var isEditing by remember { mutableStateOf(false) }
 
-    if (isEditing) { // show RecipeEditView if isEditing is true
+    if (isEditing) {
+        // Edit mode
         RecipeEditView(
             recipe = recipe,
             onSaveClick = { updatedRecipe ->
@@ -42,48 +41,56 @@ fun RecipeDetailsView(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item { // Recipe Image
-                recipe.imageUri?.let {
-                    Log.d("RecipeDetailsView", "Image URI: $it") // check URI
-                    Image(
-                        painter = rememberAsyncImagePainter(File(context.filesDir, it)),
-                        contentDescription = "Recipe Image",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(250.dp)
-                    )
-                }
-            }
-            item { // Recipe Name
-                Text(
-                    text = "Recipe Name: ${recipe.name}",
-                    style = MaterialTheme.typography.headlineMedium
+            item {
+                Image( // Display recipe image
+                    painter = rememberAsyncImagePainter(File(LocalContext.current.filesDir, recipe.imageUri ?: "")),
+                    contentDescription = "Recipe Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
                 )
             }
-            item { // Recipe Details
+
+            item {
                 Text(
-                    text = "Ingredients: ${recipe.ingredients}",
-                    style = MaterialTheme.typography.bodyMedium
+                    text = recipe.name,
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            item {
+                Text(
+                    text = "Ingredients:",
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 Text(
-                    text = "Instructions: ${recipe.instructions}",
+                    text = recipe.ingredients,
                     style = MaterialTheme.typography.bodyMedium
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
-                    text = "Collections: ${recipe.collectionTags}",
+                    text = "Instructions:",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Text(
+                    text = recipe.instructions,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            item {  // Predefined Tags Section
-                Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
-                FlowRow( // layout that fills items from left to right
+
+            item {
+                Text(text = "Category Tags:", style = MaterialTheme.typography.headlineSmall)
+                FlowRow(
                     modifier = Modifier.fillMaxWidth(),
-                    maxItemsInEachRow = 6, // text + icon = 2 items
+                    maxItemsInEachRow = 6,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     recipe.selectedTags.split(",").forEach { tag ->
-                        val trimmedTag = tag.trim() // Trim spaces to avoid issues with matching
+                        val trimmedTag = tag.trim()
                         val iconRes = tagIcons[trimmedTag]
                         if (iconRes != null) {
                             Icon(
@@ -96,12 +103,13 @@ fun RecipeDetailsView(
                                 modifier = Modifier.padding(end = 16.dp)
                             )
                         } else {
-                            Text(text = trimmedTag) // Fallback if no icon is available
+                            Text(text = trimmedTag)
                         }
                     }
                 }
             }
-            item {  // Action buttons (Edit & Delete)
+
+            item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly

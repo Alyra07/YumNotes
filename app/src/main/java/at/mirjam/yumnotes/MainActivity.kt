@@ -27,8 +27,8 @@ import at.mirjam.yumnotes.viewmodel.ProfileViewModel
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 import at.mirjam.yumnotes.viewmodel.ViewModelFactory
 
-// I used Jetpack Compose with a single MainActivity
-// -> managing navigation through a NavHost
+// I used Jetpack Compose with a single MainActivity to make the code more readable
+// -> managing navigation through a single NavHost
 class MainActivity : ComponentActivity() {
     private val recipeViewModel: RecipeViewModel by viewModels { // RecipeViewModel
         ViewModelFactory(applicationContext)
@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
+
                         // CategoryScreen (for selectedTags with tagIcons)
                         composable("category/{tag}") { backStackEntry ->
                             val tag = backStackEntry.arguments?.getString("tag") ?: ""
@@ -77,6 +78,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
                         // AddRecipeScreen
                         composable("addRecipe") {
                             AddRecipeScreen(recipeViewModel = recipeViewModel)
@@ -91,15 +93,18 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
+
                         // ProfileScreen
                         composable("profile") {
                             ProfileScreen(profileViewModel = profileViewModel)
                         }
+
                         // RecipeDetailsView
                         composable(
                             "details/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
                         ) { backStackEntry ->
+                            // Retrieve the recipeId from the backStackEntry
                             val recipeId = backStackEntry.arguments?.getLong("recipeId") ?: 0L
                             val recipe = recipeViewModel.recipes.value.firstOrNull { it.id == recipeId }
                             recipe?.let {
@@ -115,11 +120,13 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+
                         // RecipeEditView (edit or delete in RecipeDetailsView)
                         composable(
                             "editRecipe/{recipeId}",
                             arguments = listOf(navArgument("recipeId") { type = NavType.LongType })
                         ) { backStackEntry ->
+                            // Retrieve the recipeId from the backStackEntry
                             val recipeId = backStackEntry.arguments?.getLong("recipeId") ?: 0L
                             val recipe = recipeViewModel.recipes.value.firstOrNull { it.id == recipeId }
                             recipe?.let {

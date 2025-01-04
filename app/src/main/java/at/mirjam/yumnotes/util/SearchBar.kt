@@ -1,14 +1,15 @@
 package at.mirjam.yumnotes.util
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Text
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchBar(
@@ -26,21 +27,21 @@ fun SearchBar(
             Text(
                 text = placeholderText,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
         leadingIcon = {
-            IconButton(onClick = { /* Add search icon behavior here */ }) {
-                Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
-            }
+            Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         colors = TextFieldDefaults.colors(
-            Color.Transparent, // No underline when focused
-            Color.Transparent, // No underline when unfocused
-            MaterialTheme.colorScheme.primaryContainer // background color
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedContainerColor = MaterialTheme.colorScheme.secondary,
+            cursorColor = MaterialTheme.colorScheme.onSecondary
         ),
-        textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White), // input text white
+        textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface),
         singleLine = true
     )
 }
