@@ -127,11 +127,8 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors( // used to customize colors of the TextField
-                focusedBorderColor = MaterialTheme.colorScheme.onSecondary,
-                focusedLabelColor = MaterialTheme.colorScheme.onSecondary,
-                cursorColor = MaterialTheme.colorScheme.onSurface,
+                focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                 unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         )
 

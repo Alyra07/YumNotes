@@ -26,6 +26,7 @@ val tagIcons = mapOf(
     "Vegetarian" to R.drawable.vegetarian_icon,
     "Sweet" to R.drawable.sweet_icon,
     "Asian Cuisine" to R.drawable.asiancuisine_icon,
+    "Drinks" to R.drawable.drinks_icon
 )
 
 // Category Icon Row to display category icons (HomeScreen, CollectionsScreen)
@@ -40,7 +41,7 @@ fun CategoryIconRow(navController: NavController) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .padding(horizontal = 13.dp, vertical = 4.dp)
                         .clickable {
                             // Navigate to CategoryScreen with the selected tag
                             navController.navigate("category/$tag")

@@ -47,6 +47,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
         item {
             HeaderWithLogo(heading = "Add New Recipe")
         }
+
         // Recipe details fields
         item {
             OutlinedTextField( // recipe.name
@@ -127,7 +128,11 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
         item { // Select Image Button
             Button(
                 onClick = { getImage.launch("image/*") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
+                )
             ) {
                 Text("Select Image")
             }
