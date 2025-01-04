@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import at.mirjam.yumnotes.data.Recipe
+import at.mirjam.yumnotes.util.HeaderWithLogo
 import at.mirjam.yumnotes.util.tagIcons
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
 
@@ -44,7 +45,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Text(text = "Add New Recipe", style = MaterialTheme.typography.headlineSmall)
+            HeaderWithLogo(heading = "Add New Recipe")
         }
         // Recipe details fields
         item {

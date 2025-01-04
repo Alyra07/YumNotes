@@ -18,8 +18,8 @@ import at.mirjam.yumnotes.util.CategoryIconRow
 import at.mirjam.yumnotes.util.RecipeListItem
 import at.mirjam.yumnotes.util.SearchBar
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
+import at.mirjam.yumnotes.util.HeaderWithLogo
 
-// Adjusted HomeScreen
 @Composable
 fun HomeScreen(
     recipeViewModel: RecipeViewModel,
@@ -42,33 +42,33 @@ fun HomeScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        item { // HEADING
-            Text(
-                text = "YumNotes - Recipes",
-                style = MaterialTheme.typography.headlineSmall
-            )
+        item { // HEADING & LOGO
+            HeaderWithLogo(heading = "YumNotes - Recipes")
         }
 
-        item { // SEARCH BAR
+        // Search Bar
+        item {
             SearchBar(
                 searchQuery = searchQuery,
                 onSearchQueryChanged = { query -> searchQuery.value = query }
             )
         }
-        // CATEGORY ICON ROW
-        item { CategoryIconRow(navController = navController) }
+        // Category Icon Row
+        item {
+            CategoryIconRow(navController = navController)
+        }
 
-        if (filteredRecipes.isEmpty()) { // No recipes found
+        if (filteredRecipes.isEmpty()) {
+            // No recipes found
             item {
                 Text(
-                    text = "No recipes found.",
+                    text = "No recipes found. Add some now! :)",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(16.dp)
                 )
             }
         } else {
-            // FEATURED RECIPE
+            // Featured Recipe Section
             recipes.randomOrNull()?.let { randomRecipe ->
                 item {
                     Text(
@@ -76,12 +76,12 @@ fun HomeScreen(
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    // display a random RecipeListItem
+                    // Display a random RecipeListItem
                     RecipeListItem(recipe = randomRecipe, onClick = onRecipeClick)
                 }
             }
 
-            item { // ALL RECIPES SECTION
+            item { // All Recipes Section
                 Text(
                     text = "All Recipes",
                     style = MaterialTheme.typography.headlineSmall
@@ -92,6 +92,5 @@ fun HomeScreen(
                 RecipeListItem(recipe = recipe, onClick = onRecipeClick)
             }
         }
-
     }
 }

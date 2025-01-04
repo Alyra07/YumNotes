@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.util.CategoryIconRow
+import at.mirjam.yumnotes.util.HeaderWithLogo
 import at.mirjam.yumnotes.util.RecipeListItem
 import at.mirjam.yumnotes.util.SearchBar
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
@@ -46,12 +47,8 @@ fun CollectionsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // HEADING
-        item {
-            Text(
-                text = "Your Collections",
-                style = MaterialTheme.typography.headlineSmall
-            )
+        item { // HEADING & LOGO
+            HeaderWithLogo(heading = "Your Collections")
         }
 
         // SEARCH BAR
@@ -72,7 +69,7 @@ fun CollectionsScreen(
         if (filteredRecipes.isEmpty()) {
             item {
                 Text(
-                    text = "No recipes found for the given tag.",
+                    text = "No recipes found in this collection...",
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(16.dp)
                 )
@@ -83,7 +80,8 @@ fun CollectionsScreen(
             val otherRecipes = mutableListOf<Recipe>() // For recipes without collectionTags
 
             filteredRecipes.forEach { recipe ->
-                val tags = recipe.collectionTags.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+                val tags =
+                    recipe.collectionTags.split(",").map { it.trim() }.filter { it.isNotEmpty() }
                 if (tags.isEmpty()) {
                     otherRecipes.add(recipe)
                 } else {
