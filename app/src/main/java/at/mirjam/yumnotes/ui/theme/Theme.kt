@@ -5,34 +5,39 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color.Companion.Black
 
 // Define custom color schemes
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryBrown,
+    primary = PrettyGreen,
     onPrimary = White,
-    secondary = AccentRed,
-    onSecondary = AccentPeach,
+    secondary = AccentPeach,
+    onSecondary = Black,
     background = Black,
     onBackground = LightGray,
-    surface = DarkGray,
-    onSurface = LightGray,
-    tertiary = SecondaryGreen,
-    onTertiary = LightGray,
-    onError = AccentOrange
+    surface = DarkGray, // color of selected tab in NavBar
+    surfaceContainer = DarkGray,
+    onSurface = LightGray, //
+    onSurfaceVariant = LightGray,
+    tertiary = DarkBrown,
+    onTertiary = White,
+    error = AccentOrange
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryBrown,
+    primary = PrettyGreen,
     onPrimary = White,
-    secondary = AccentBeige,
-    onSecondary = Black,
+    secondary = DarkBrown,
+    onSecondary = White,
     background = LightGray,
     onBackground = Black,
     surface = White,
+    surfaceContainer = LightGray,
     onSurface = DarkGray,
-    tertiary = AccentOrange,
-    onTertiary = AccentPeach,
-    onError = AccentRed
+    onSurfaceVariant = DarkGray,
+    tertiary = AccentBeige,
+    onTertiary = Black,
+    error = AccentRed
 )
 
 @Composable

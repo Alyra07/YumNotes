@@ -19,6 +19,7 @@ fun SearchBar(
 ) {
     TextField(
         value = searchQuery.value,
+        // set the value of the search field
         onValueChange = { newValue ->
             searchQuery.value = newValue
             onSearchQueryChanged(newValue)
@@ -38,7 +39,7 @@ fun SearchBar(
             .padding(8.dp),
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedContainerColor = MaterialTheme.colorScheme.secondary,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             cursorColor = MaterialTheme.colorScheme.onSecondary
         ),
         textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface),

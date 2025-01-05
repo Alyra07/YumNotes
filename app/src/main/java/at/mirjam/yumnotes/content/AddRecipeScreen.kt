@@ -4,21 +4,27 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import at.mirjam.yumnotes.R
 import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.util.HeaderWithLogo
 import at.mirjam.yumnotes.util.tagIcons
 import at.mirjam.yumnotes.viewmodel.RecipeViewModel
+import coil.compose.rememberAsyncImagePainter
 
 @OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("MutableCollectionMutableState")
@@ -47,16 +53,48 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
         item {
             HeaderWithLogo(heading = "Add New Recipe")
         }
-        // Recipe details fields
-        item {
-            OutlinedTextField( // recipe.name
+
+        item { // recipe.name
+            OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text("Recipe Name") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
             )
+        }
+        item { // Select Image Section
+            imageUri?.let {
+                // Display selected image
+                Image(
+                    painter = rememberAsyncImagePainter(it),
+                    contentDescription = "Selected Recipe Image",
+                    modifier = Modifier
+                        .size(200.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            } ?: Image( // Placeholder image for when no image is selected
+                painter = painterResource(id = R.drawable.placeholder_img),
+                contentDescription = "Placeholder Image",
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Button(
+                onClick = { getImage.launch("image/*") },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    contentColor = MaterialTheme.colorScheme.onTertiary
+                )
+            ) {
+                Text("Select Image")
+            }
+        }
 
+        // Recipe fields
+        item {
             OutlinedTextField( // recipe.ingredients
                 value = ingredients,
                 onValueChange = { ingredients = it },
@@ -80,7 +118,7 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(bottom = 8.dp))
 
-            // Toggleable CategoryIconRow
+            // Toggleable tagIcons
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -96,16 +134,16 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (selectedTags.value.contains(tag))
-                                MaterialTheme.colorScheme.primary
+                                MaterialTheme.colorScheme.secondary
                             else
                                 MaterialTheme.colorScheme.surface,
                             contentColor = if (selectedTags.value.contains(tag))
-                                MaterialTheme.colorScheme.onPrimary
+                                MaterialTheme.colorScheme.onSecondary
                             else
                                 MaterialTheme.colorScheme.onSurface
                         )
                     ) {
-                        Icon(
+                        Image( // Category icon
                             painter = painterResource(id = iconRes),
                             contentDescription = "$tag Icon",
                             modifier = Modifier.size(24.dp)
@@ -123,19 +161,6 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
         ) }
-
-        item { // Select Image Button
-            Button(
-                onClick = { getImage.launch("image/*") },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Select Image")
-            }
-
-            imageUri?.let {
-                Text("Image Selected: $it")
-            }
-        }
 
         item { // Save Recipe Button
             Button(

@@ -1,9 +1,12 @@
 package at.mirjam.yumnotes.content
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +19,18 @@ import at.mirjam.yumnotes.data.Recipe
 import at.mirjam.yumnotes.util.tagIcons
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import at.mirjam.yumnotes.R
+import coil.compose.rememberAsyncImagePainter
+import java.io.File
 
 @OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("MutableCollectionMutableState")
@@ -35,6 +47,28 @@ fun RecipeEditView(
     // Initialize selectedTags by splitting the string from the recipe data
     var selectedTags by remember { mutableStateOf(recipe.selectedTags.split(",").toMutableSet()) }
 
+    // Initialize imageUri with the existing imageUri from the recipe or null if empty
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    // Launcher to pick an image from gallery
+    val getImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        imageUri = uri
+    }
+
+    val context = LocalContext.current
+    LaunchedEffect(recipe) {
+        // Construct the full file path for the image
+        imageUri = recipe.imageUri?.let {
+            // Get the full path by using the app's internal storage directory
+            File(context.filesDir, it).let { file ->
+                if (file.exists()) {
+                    Uri.fromFile(file)
+                } else {
+                    null // If the file doesn't exist, fallback to null
+                }
+            }
+        }
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -46,6 +80,40 @@ fun RecipeEditView(
                 text = "Edit Recipe",
                 style = MaterialTheme.typography.headlineSmall
             )
+        }
+
+        item { // Select Image
+            Column (
+                Modifier.fillMaxWidth(),
+                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            ) {
+                imageUri?.let {
+                    Image( // If imageUri is not null, use it
+                        painter = rememberAsyncImagePainter(
+                            model = it,
+                            placeholder = painterResource(id = R.drawable.placeholder_img),
+                            error = painterResource(id = R.drawable.placeholder_img)
+                        ),
+                        contentDescription = "Selected Recipe Image",
+                        modifier = Modifier.size(200.dp).clip(RoundedCornerShape(16.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                } ?: Image(
+                    painter = painterResource(id = R.drawable.placeholder_img), // Use placeholder image if no URI
+                    contentDescription = "Placeholder Image",
+                    modifier = Modifier.size(200.dp).clip(RoundedCornerShape(16.dp)),
+                    contentScale = ContentScale.Crop
+                )
+                Button(
+                    onClick = { getImage.launch("image/*") },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    )
+                ) {
+                    Text("Select Image")
+                }
+            }
         }
 
         item { // Recipe fields
@@ -83,10 +151,9 @@ fun RecipeEditView(
             }
         }
 
-        item { // Predefined Tags Section
+        item { // Category Tags Section
             Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
-            FlowRow(
-                // adjusts category icons flexibly
+            FlowRow( // adjusts category icons flexibly
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -103,18 +170,18 @@ fun RecipeEditView(
                                 }
                             }
                         },
-                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        colors = ButtonDefaults.buttonColors(
                             containerColor = if (selectedTags.contains(tag))
-                                MaterialTheme.colorScheme.primary
+                                MaterialTheme.colorScheme.secondary
                             else
                                 MaterialTheme.colorScheme.surface,
                             contentColor = if (selectedTags.contains(tag))
-                                MaterialTheme.colorScheme.onPrimary
+                                MaterialTheme.colorScheme.onSecondary
                             else
                                 MaterialTheme.colorScheme.onSurface
                         )
                     ) {
-                        Icon(
+                        Image( // Category Icon
                             painter = painterResource(id = iconRes),
                             contentDescription = "$tag Icon",
                             modifier = Modifier.size(24.dp)
@@ -127,13 +194,12 @@ fun RecipeEditView(
                 }
             }
         }
-
-        item { // Buttons section
+        item { // Buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Button(
+                Button( // Save
                     onClick = {
                         val updatedRecipe = recipe.copy(
                             name = name,
@@ -141,7 +207,8 @@ fun RecipeEditView(
                             instructions = instructions,
                             collectionTags = tags,
                             // Convert selectedTags back to a string when saving
-                            selectedTags = selectedTags.joinToString(",")
+                            selectedTags = selectedTags.joinToString(","),
+                            imageUri = imageUri?.toString(), // Convert Uri to String
                         )
                         onSaveClick(updatedRecipe)
                     },
@@ -150,9 +217,13 @@ fun RecipeEditView(
                     Text("Save")
                 }
 
-                Button(
+                Button( // Cancel
                     onClick = onCancelClick,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
                 ) {
                     Text("Cancel")
                 }

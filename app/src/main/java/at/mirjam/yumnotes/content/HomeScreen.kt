@@ -72,8 +72,8 @@ fun HomeScreen(
             recipes.randomOrNull()?.let { randomRecipe ->
                 item {
                     Text(
-                        text = "Featured Recipe",
-                        style = MaterialTheme.typography.headlineSmall,
+                        text = "You could make ...",
+                        style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                     // Display a random RecipeListItem
@@ -84,7 +84,7 @@ fun HomeScreen(
             item { // All Recipes Section
                 Text(
                     text = "All Recipes",
-                    style = MaterialTheme.typography.headlineSmall
+                    style = MaterialTheme.typography.headlineSmall,
                 )
             }
             // Display filtered recipes (based on search query)

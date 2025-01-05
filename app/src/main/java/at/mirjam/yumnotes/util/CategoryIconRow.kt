@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -25,7 +24,8 @@ val tagIcons = mapOf(
     "Italian" to R.drawable.italian_icon,
     "Vegetarian" to R.drawable.vegetarian_icon,
     "Sweet" to R.drawable.sweet_icon,
-    "Asian Cuisine" to R.drawable.asiancuisine_icon,
+    "American" to R.drawable.american_icon,
+    "Drinks" to R.drawable.drinks_icon
 )
 
 // Category Icon Row to display category icons (HomeScreen, CollectionsScreen)
@@ -40,7 +40,7 @@ fun CategoryIconRow(navController: NavController) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .padding(horizontal = 13.dp, vertical = 4.dp)
                         .clickable {
                             // Navigate to CategoryScreen with the selected tag
                             navController.navigate("category/$tag")
@@ -50,7 +50,8 @@ fun CategoryIconRow(navController: NavController) {
                         painter = painterResource(id = iconRes),
                         contentDescription = "$tag Icon",
                         modifier = Modifier.size(48.dp),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+//                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+                        alpha = 0.85f
                     )
                     Text(
                         text = tag,

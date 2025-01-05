@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 // Room Database for storing Recipe & Profile data
-@Database(entities = [Recipe::class, Profile::class], version = 1, exportSchema = false)
+@Database(entities = [Recipe::class, Profile::class], version = 2, exportSchema = false)
 abstract class YumNotesDatabase : RoomDatabase() {
     // abstract methods to access DAOs for each entity
     abstract fun recipeDao(): RecipeDao
