@@ -41,7 +41,7 @@ class RecipeViewModel(private val repository: RecipeRepository, private val cont
     fun addRecipe(recipe: Recipe) {
         viewModelScope.launch {
             try {
-                repository.insertRecipe(recipe, context) // Pass context
+                repository.insertRecipe(recipe, context)
                 loadRecipes()
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error adding recipe: ${e.message}")
@@ -53,8 +53,8 @@ class RecipeViewModel(private val repository: RecipeRepository, private val cont
     fun updateRecipe(updatedRecipe: Recipe) {
         viewModelScope.launch {
             try {
-                repository.updateRecipe(updatedRecipe)
-                loadRecipes()
+                repository.updateRecipe(updatedRecipe, context)
+                loadRecipes() // Reload the recipes after updating
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error updating recipe: ${e.message}")
             }

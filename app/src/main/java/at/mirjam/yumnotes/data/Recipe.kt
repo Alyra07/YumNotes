@@ -12,5 +12,6 @@ data class Recipe(
     val instructions: String,
     val collectionTags: String, // Comma-separated custom tags
     val selectedTags: String,  // Comma-separated predefined tags
-    val imageUri: String? = null // Store the image URI (or path to the image file)
+    val imageUri: String? = null, // Store the image URI (FileUtil)
+    val originalImageUri: String? = null // Store the original image URI (for comparison when updating)
 )

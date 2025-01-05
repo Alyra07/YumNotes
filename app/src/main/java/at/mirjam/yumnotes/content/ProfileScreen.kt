@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -12,6 +13,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -33,7 +36,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
 
     LaunchedEffect(profile?.username, profile?.profileImageUri) {
         username = profile?.username ?: "YumUser" // Default username YumUser
-        profileImageUri = profile?.profileImageUri // Update the URI
+        profileImageUri = profile?.profileImageUri // Update the Uri
     }
 
     // Handle profile image selection
@@ -58,15 +61,16 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
         // PROFILE IMAGE
         Box(
             modifier = Modifier
-                .size(250.dp)
-                .padding(8.dp)
+                .size(260.dp)
+                .clip(RoundedCornerShape(16.dp))
         ) {
             profileImageUri?.let {
                 Image( // Display the selected profile image
                     painter = rememberAsyncImagePainter(File(context.filesDir, it)),
                     contentDescription = "Profile Picture",
                     modifier = Modifier.fillMaxSize(),
-                    alignment = Alignment.Center
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.Crop // crop the image to fit the box
                 )
             } ?: run {
                 // Default image when no profile image is selected
@@ -83,7 +87,6 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(8.dp)
         ) {
             IconButton( // edit
                 onClick = { imagePickerLauncher.launch("image/*") },
@@ -112,11 +115,13 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                 )
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Username field (can edit)
         OutlinedTextField(
             value = username,
             onValueChange = { newText ->
+                // Limits the username to 30 characters
                 if (newText.length in 1..30) {
                     username = newText
                 } else if (newText.length > 30) {
@@ -143,7 +148,6 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ),
-            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Save Username")
         }

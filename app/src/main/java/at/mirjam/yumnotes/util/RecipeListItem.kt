@@ -59,6 +59,7 @@ fun RecipeListItem(
                 color = MaterialTheme.colorScheme.onTertiary,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
+            Spacer(modifier = Modifier.height(4.dp))
 
             // Tags
             if (recipe.collectionTags.isNotEmpty()) {
@@ -66,8 +67,9 @@ fun RecipeListItem(
                     text = "Collections: ${recipe.collectionTags}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }

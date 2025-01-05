@@ -20,12 +20,12 @@ import at.mirjam.yumnotes.R
 // Tags for category icons (CategoryScreen)
 // assigns predefined tags to Icons for categories
 val tagIcons = mapOf(
-    "Quick" to R.drawable.quick2_icon,
-    "Italian" to R.drawable.italian2_icon,
-    "Vegetarian" to R.drawable.vegetarian2_icon,
-    "Sweet" to R.drawable.sweet2_icon,
+    "Quick" to R.drawable.quick_icon,
+    "Italian" to R.drawable.italian_icon,
+    "Vegetarian" to R.drawable.vegetarian_icon,
+    "Sweet" to R.drawable.sweet_icon,
     "American" to R.drawable.american_icon,
-    "Drinks" to R.drawable.drink2_icon
+    "Drinks" to R.drawable.drinks_icon
 )
 
 // Category Icon Row to display category icons (HomeScreen, CollectionsScreen)

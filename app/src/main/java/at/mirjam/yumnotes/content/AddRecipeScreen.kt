@@ -64,8 +64,8 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
             )
         }
         item { // Select Image Section
-            // Display selected image
             imageUri?.let {
+                // Display selected image
                 Image(
                     painter = rememberAsyncImagePainter(it),
                     contentDescription = "Selected Recipe Image",
@@ -84,15 +84,15 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
             )
             Button(
                 onClick = { getImage.launch("image/*") },
-                modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    contentColor = MaterialTheme.colorScheme.onTertiary
                 )
             ) {
                 Text("Select Image")
             }
         }
+
         // Recipe fields
         item {
             OutlinedTextField( // recipe.ingredients
@@ -134,11 +134,11 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (selectedTags.value.contains(tag))
-                                MaterialTheme.colorScheme.primary
+                                MaterialTheme.colorScheme.secondary
                             else
                                 MaterialTheme.colorScheme.surface,
                             contentColor = if (selectedTags.value.contains(tag))
-                                MaterialTheme.colorScheme.onPrimary
+                                MaterialTheme.colorScheme.onSecondary
                             else
                                 MaterialTheme.colorScheme.onSurface
                         )

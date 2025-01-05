@@ -109,7 +109,7 @@ fun CollectionsScreen(
                 item {
                     Text(
                         text = "Other Recipes",
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 }
                 items(otherRecipes) { recipe ->

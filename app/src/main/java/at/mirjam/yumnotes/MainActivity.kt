@@ -114,6 +114,7 @@ class MainActivity : ComponentActivity() {
                                         navController.popBackStack()
                                     },
                                     onSaveEdit = { updatedRecipe ->
+                                        // Save the updated recipe
                                         recipeViewModel.updateRecipe(updatedRecipe)
                                     },
                                     navController = navController // for back button
@@ -134,10 +135,10 @@ class MainActivity : ComponentActivity() {
                                     recipe = it,
                                     onSaveClick = { updatedRecipe ->
                                         recipeViewModel.updateRecipe(updatedRecipe)
-                                        navController.popBackStack() // Return to the details screen after saving
+                                        navController.popBackStack() // Return to details screen after saving
                                     },
                                     onCancelClick = {
-                                        navController.popBackStack() // Return to the details screen without saving
+                                        navController.popBackStack() // Return without saving
                                     }
                                 )
                             }
