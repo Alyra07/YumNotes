@@ -89,8 +89,8 @@ fun RecipeDetailsView(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box( // take full width
-                        modifier = Modifier.weight(1f)
+                    Box(
+                        modifier = Modifier.weight(1f) // Box takes full width
                     ) {
                         Text( // Recipe Name
                             text = recipe.name,
@@ -175,7 +175,7 @@ fun RecipeDetailsView(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // Display ingredients in a FlowRow in two columns (split by comma)
+                    // Display ingredients in two columns (split by comma)
                     recipe.ingredients.split(",").forEach { ingredient ->
                         Text(
                             text = ingredient.trim(),
@@ -188,7 +188,7 @@ fun RecipeDetailsView(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }
-            item {
+            item { // recipe.instructions
                 Text(
                     text = "Instructions:",
                     style = MaterialTheme.typography.headlineSmall

@@ -35,7 +35,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
     var profileImageUri by remember { mutableStateOf(profile?.profileImageUri) }
 
     LaunchedEffect(profile?.username, profile?.profileImageUri) {
-        username = profile?.username ?: "YumUser" // Default username YumUser
+        username = profile?.username ?: "YumUser" // Default username: YumUser
         profileImageUri = profile?.profileImageUri // Update the Uri
     }
 
@@ -44,7 +44,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
                 profileViewModel.saveProfileImage(context, uri)
-                profileImageUri = uri.toString()  // Save the URI for future use
+                profileImageUri = uri.toString()  // Save the Uri
             }
         }
 
@@ -55,7 +55,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // HEADING with Logo
+        // HEADING & LOGO
         HeaderWithLogo(heading = "Your Profile")
 
         // PROFILE IMAGE
@@ -82,7 +82,6 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                 )
             }
         }
-
         // Edit and delete buttons for Profile image
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -136,7 +135,6 @@ fun ProfileScreen(profileViewModel: ProfileViewModel) {
                 unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         )
-
         // Save Username button
         Button(
             onClick = {

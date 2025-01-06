@@ -43,7 +43,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item { // HEADING & LOGO
-            HeaderWithLogo(heading = "YumNotes - Recipes")
+            HeaderWithLogo(heading = "YumNotes")
         }
 
         // Search Bar
@@ -59,34 +59,48 @@ fun HomeScreen(
         }
 
         if (filteredRecipes.isEmpty()) {
-            // No recipes found
-            item {
-                Text(
-                    text = "No recipes found. Add some now! :)",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        } else {
-            // Featured Recipe Section
-            recipes.randomOrNull()?.let { randomRecipe ->
+            // when no recipes match the search query
+            if (searchQuery.value.isNotEmpty()) {
                 item {
                     Text(
-                        text = "You could make ...",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        text = "No recipes found matching your search.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
                     )
-                    // Display a random RecipeListItem
-                    RecipeListItem(recipe = randomRecipe, onClick = onRecipeClick)
+                }
+            } else {
+                // when there are no recipes, and nothing is searched
+                item {
+                    Text(
+                        text = "No recipes found. Add some now! :)",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+        } else {
+            // Show these sections only if no search query is active
+            if (searchQuery.value.isEmpty()) {
+                // Display a random RecipeListItem as featured recipe
+                recipes.randomOrNull()?.let { randomRecipe ->
+                    item {
+                        Text(
+                            text = "You could make ...",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        RecipeListItem(recipe = randomRecipe, onClick = onRecipeClick)
+                    }
+                }
+                // "All Recipes" section
+                item {
+                    Text(
+                        text = "All Recipes",
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
                 }
             }
 
-            item { // All Recipes Section
-                Text(
-                    text = "All Recipes",
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-            }
             // Display filtered recipes (based on search query)
             items(filteredRecipes) { recipe ->
                 RecipeListItem(recipe = recipe, onClick = onRecipeClick)

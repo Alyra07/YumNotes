@@ -32,7 +32,7 @@ fun RecipeListItem(
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.tertiary)
             .clickable { onClick(recipe) }
-            .padding(bottom = 12.dp) // space underneath text
+            .padding(bottom = 12.dp)
     ) {
         Column {
             // Recipe Image

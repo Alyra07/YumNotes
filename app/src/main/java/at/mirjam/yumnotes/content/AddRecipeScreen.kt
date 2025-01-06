@@ -55,14 +55,19 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
         }
 
         item { // recipe.name
-            OutlinedTextField(
+            TextField(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text("Recipe Name") },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface
+                )
             )
         }
+
         item { // Select Image Section
             imageUri?.let {
                 // Display selected image
@@ -95,20 +100,27 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
 
         // Recipe fields
         item {
-            OutlinedTextField( // recipe.ingredients
+            TextField( // recipe.ingredients
                 value = ingredients,
                 onValueChange = { ingredients = it },
                 label = { Text("Ingredients (comma-separated)") },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface
+                )
             )
-
-            OutlinedTextField( // recipe.instructions
+            TextField( // recipe.instructions
                 value = instructions,
                 onValueChange = { instructions = it },
                 label = { Text("Instructions") },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface
+                )
             )
         }
 
@@ -153,13 +165,18 @@ fun AddRecipeScreen(recipeViewModel: RecipeViewModel) {
                 }
             }
         }
-        item { // Custom Tags field
-            OutlinedTextField( // recipe.collectionTags
+
+        item { // Custom collection tags field
+            TextField( // recipe.collectionTags
             value = collectionTags,
             onValueChange = { collectionTags = it },
             label = { Text("Custom Tags (comma-separated)") },
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface
+                )
         ) }
 
         item { // Save Recipe Button
