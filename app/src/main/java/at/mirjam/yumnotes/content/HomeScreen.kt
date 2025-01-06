@@ -43,7 +43,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item { // HEADING & LOGO
-            HeaderWithLogo(heading = "YumNotes - Recipes")
+            HeaderWithLogo(heading = "YumNotes")
         }
 
         // Search Bar

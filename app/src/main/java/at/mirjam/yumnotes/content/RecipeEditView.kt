@@ -22,13 +22,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import at.mirjam.yumnotes.R
+import at.mirjam.yumnotes.util.HeaderWithLogo
 import coil.compose.rememberAsyncImagePainter
 import java.io.File
 
@@ -73,19 +76,17 @@ fun RecipeEditView(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            Text(
-                text = "Edit Recipe",
-                style = MaterialTheme.typography.headlineSmall
-            )
+            HeaderWithLogo(heading = "Edit Recipe")
         }
 
         item { // Select Image
             Column (
                 Modifier.fillMaxWidth(),
-                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 imageUri?.let {
                     Image( // If imageUri is not null, use it
@@ -99,7 +100,7 @@ fun RecipeEditView(
                         contentScale = ContentScale.Crop
                     )
                 } ?: Image(
-                    painter = painterResource(id = R.drawable.placeholder_img), // Use placeholder image if no URI
+                    painter = painterResource(id = R.drawable.placeholder_img), // placeholder image if no URI
                     contentDescription = "Placeholder Image",
                     modifier = Modifier.size(200.dp).clip(RoundedCornerShape(16.dp)),
                     contentScale = ContentScale.Crop
@@ -125,28 +126,41 @@ fun RecipeEditView(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text("Recipe Name") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface
+                        )
                 )
-
                 TextField(
                     value = ingredients,
                     onValueChange = { ingredients = it },
                     label = { Text("Ingredients") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface
+                    )
                 )
-
                 TextField(
                     value = instructions,
                     onValueChange = { instructions = it },
                     label = { Text("Instructions") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface
+                    )
                 )
-
                 TextField(
                     value = tags,
                     onValueChange = { tags = it },
                     label = { Text("Collection Tags") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface
+                    )
                 )
             }
         }
@@ -154,14 +168,14 @@ fun RecipeEditView(
         item { // Category Tags Section
             Text(text = "Category Tags:", style = MaterialTheme.typography.bodySmall)
             FlowRow( // adjusts category icons flexibly
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 tagIcons.forEach { (tag, iconRes) ->
                     Button(
                         onClick = {
-                            // Update selectedTags state with a new MutableSet
+                            // update selectedTags state with a new MutableSet
                             selectedTags = selectedTags.toMutableSet().apply {
                                 if (contains(tag)) {
                                     remove(tag)
