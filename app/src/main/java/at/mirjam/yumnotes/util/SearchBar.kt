@@ -1,7 +1,6 @@
 package at.mirjam.yumnotes.util
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -9,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchBar(
@@ -31,16 +29,15 @@ fun SearchBar(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
-        leadingIcon = {
+        leadingIcon = { // search icon
             Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
         },
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+            .fillMaxWidth(),
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-            cursorColor = MaterialTheme.colorScheme.onSecondary
+            cursorColor = MaterialTheme.colorScheme.onSurface,
         ),
         textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface),
         singleLine = true

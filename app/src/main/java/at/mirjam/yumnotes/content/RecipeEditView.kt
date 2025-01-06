@@ -105,7 +105,7 @@ fun RecipeEditView(
                     modifier = Modifier.size(200.dp).clip(RoundedCornerShape(16.dp)),
                     contentScale = ContentScale.Crop
                 )
-                Button(
+                Button( // Button to pick an image from gallery
                     onClick = { getImage.launch("image/*") },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.tertiary,
@@ -117,7 +117,7 @@ fun RecipeEditView(
             }
         }
 
-        item { // Recipe fields
+        item { // Other recipe fields
             Column (
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -208,6 +208,7 @@ fun RecipeEditView(
                 }
             }
         }
+
         item { // Buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -222,7 +223,7 @@ fun RecipeEditView(
                             collectionTags = tags,
                             // Convert selectedTags back to a string when saving
                             selectedTags = selectedTags.joinToString(","),
-                            imageUri = imageUri?.toString(), // Convert Uri to String
+                            imageUri = imageUri?.toString(),
                         )
                         onSaveClick(updatedRecipe)
                     },

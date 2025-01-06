@@ -42,7 +42,7 @@ fun CategoryScreen(
                 )
             }
         } else {
-            // Display filtered recipes
+            // Display recipes filtered by category
             items(filteredRecipes) { recipe ->
                 RecipeListItem(recipe = recipe, onClick = onRecipeClick)
             }

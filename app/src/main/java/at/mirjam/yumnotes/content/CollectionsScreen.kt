@@ -27,8 +27,7 @@ fun CollectionsScreen(
 ) {
     val recipes = recipeViewModel.recipes.collectAsState(initial = emptyList()).value
 
-    // SearchBar search query state
-    val searchQuery = remember { mutableStateOf("") }
+    val searchQuery = remember { mutableStateOf("") } // SearchBar state
 
     // Filtered recipes based on collectionTags
     val filteredRecipes = if (searchQuery.value.isNotEmpty()) {
@@ -62,10 +61,10 @@ fun CollectionsScreen(
 
         // PREDEFINED TAGS (Categories)
         item {
-            // Category Icons
             CategoryIconRow(navController = navController)
         }
 
+        // when no recipes are found
         if (filteredRecipes.isEmpty()) {
             item {
                 Text(
@@ -79,6 +78,7 @@ fun CollectionsScreen(
             val tagToRecipesMap = mutableMapOf<String, MutableList<Recipe>>()
             val otherRecipes = mutableListOf<Recipe>() // For recipes without collectionTags
 
+            // Separate recipes by collectionTags
             filteredRecipes.forEach { recipe ->
                 val tags =
                     recipe.collectionTags.split(",").map { it.trim() }.filter { it.isNotEmpty() }
@@ -90,7 +90,6 @@ fun CollectionsScreen(
                     }
                 }
             }
-
             // Display recipes grouped by collectionTags
             tagToRecipesMap.forEach { (tag, recipesForTag) ->
                 item {
@@ -103,7 +102,6 @@ fun CollectionsScreen(
                     RecipeListItem(recipe = recipe, onClick = onRecipeClick)
                 }
             }
-
             // Display recipes without collectionTags under "Other Recipes"
             if (otherRecipes.isNotEmpty()) {
                 item {

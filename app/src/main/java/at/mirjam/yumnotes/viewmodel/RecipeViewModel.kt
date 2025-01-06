@@ -54,7 +54,7 @@ class RecipeViewModel(private val repository: RecipeRepository, private val cont
         viewModelScope.launch {
             try {
                 repository.updateRecipe(updatedRecipe, context)
-                loadRecipes() // Reload the recipes after updating
+                loadRecipes()
             } catch (e: Exception) {
                 Log.e("RecipeViewModel", "Error updating recipe: ${e.message}")
             }

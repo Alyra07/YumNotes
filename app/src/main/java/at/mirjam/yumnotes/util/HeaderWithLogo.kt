@@ -32,7 +32,7 @@ fun HeaderWithLogo(
             painter = painterResource(id = R.drawable.yumnotes_logo),
             contentDescription = "YumNotes Logo",
             modifier = Modifier.size(68.dp),
-            alpha = 0.8f // Subtle transparency
+            alpha = 0.8f // transparency
         )
     }
 }
